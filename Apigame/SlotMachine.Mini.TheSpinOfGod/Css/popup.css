@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* uwin-Intecom Design Team
+Project name: Thập Nhị Tranh Tài - Version 3
+Javascript Framework: jQuery
+Version: 1.0
+Author: hai.phamtuan@uwin.vn
+Date created: 16.8.2012
+*/
+.vide { clear:both; height:0; padding:0; margin:0; }
+.red_txt { color:#db0000; }
+.pop_form { background:#f8ebbd; 750px; height:450px; overflow:hidden; font:11px Tahoma, Geneva, sans-serif; }
+.pop_form a { color:#db0000; text-decoration:none; }
+.pop_form a:hover { color:#000; text-decoration:none; }
+.pop_t_c { background:url(../images/pop_t_c.gif) repeat-x top left; height:38px; }
+.pop_t_l { background:url(../images/pop_t_l_titl.gif) no-repeat top left; height:38px; }
+.pop_t_r { background:url(../images/pop_t_r.gif) no-repeat top right; height:38px; }
+.pop_mid_l { background:url(../images/pop_mid_l.gif) repeat-y top left; }
+.pop_mid_r { background:url(../images/pop_mid_r.gif) repeat-y top right; }
+.pop_bt_c { background:url(../images/pop_bt_c.gif) repeat-x top left; height:5px; }
+.pop_bt_l { background:url(../images/pop_bt_l.gif) no-repeat top left; height:5px; }
+.pop_bt_r { background:url(../images/pop_bt_r.gif) no-repeat top right; height:5px; }
+.pop_cont { height:407px; margin:0 5px 0 5px; }
+.pop_titl { background:#f3db92; border-bottom:1px #fffbdb solid; }
+.pop_titl h1 { padding:7px; text-align:center; border-bottom:1px #b9804e solid; font: normal 18px Tahoma, Geneva, sans-serif; color:#db0000; }
+.note_mes { padding:20px; font:11px Tahoma, Geneva, sans-serif; color:#773e01; }
+.note_mes p { padding:5px 0 5px 0; margin:0; }
+
+
+.lichsutt { background:url(../images/lichsutt.gif) no-repeat top left; height:38px; }
+.bangxephang { background:url(../images/bangxephang_titl.gif) no-repeat top left; height:38px; }
+.lichsudua { background:url(../images/lichsudua.gif) no-repeat top left; height:38px; }
+ul.pop_tabs { background:#f3db92; border-bottom:1px #fffbdb solid; padding:0; text-align:center; _height:34px; }
+ul.pop_tabs li { display:block; float:left; margin:5px; background:url(../images/bg_poptabs.gif) no-repeat top right; }
+ul.pop_tabs li a { background:url(../images/bg_poptabs.gif) no-repeat top left; height:12px; padding:5px 0 7px 15px; _padding:5px 0 6px 15px; margin:0 15px 0 0; _margin:0 7px 0 0; display:block; _float:left; color:#fff6dc; font: bold 11px Tahoma, Geneva, sans-serif; }
+ul.pop_tabs li a:hover { color:#FFF; }
+
+.poptab_act { display:block; float:left; margin:5px; background:url(../images/bg_poptabs.gif) no-repeat bottom right !important; }
+.poptab_act a { background:url(../images/bg_poptabs.gif) no-repeat bottom left !important; height:12px; padding:5px 0 7px 15px; _padding:5px 0 6px 15px; margin:0 15px 0 0; _margin:0 7px 0 0; display:block; _float:left; color:#000 !important; font: bold 11px Tahoma, Geneva, sans-serif; }
+
+.bang { padding:0; margin:0; border-collapse:collapse; width:100%; }
+.bang td { padding:5px; border:1px #dab781 solid; text-align:center; }
+.thead { background:#f3db92; font-weight:bold; }
+
+.khungchon { position:relative; z-index:0; }
+ul.popup_chon {
+	background: #f3db92;
+	border: 1px #a16b2b solid;
+	padding: 0 10px 0 10px;
+	border-radius: 8px;
+	display: block;
+	position: absolute;
+	left: 113px;
+	top: 95px;
+	z-index: 1;
+}
+.ico_chon {
+	display: block;
+	width: 15px;
+	height: 9px;
+	position: absolute;
+	top: -9px;
+	left: 140px;
+	_top: -11px;
+	_left: 130px;
+	z-index: 1;
+}
+ul.popup_chon li { display:block; float:left; margin:0 5px 0 5px; }
+ul.popup_chon li a { display:block; height:42px; padding:8px 0 0 0; _float:left; }
+ul.popup_chon li a:hover, a.tamgiac { background:url(../images/tamgiac2.png) no-repeat center bottom;  }
+ul.pet_items { display:block; float:right; padding:0; margin:0 190px 0 0; }
+ul.pet_items li { display:block; float:left; background:url(../images/bg_pet_col.png) no-repeat; width:75px; height:70px; position:relative; z-index:1; margin:7px 7px 0 18px; _margin:7px 5px 0 18px; text-align:center; padding-top:5px; }
+a.chonthu { color:#FFF; font:bold 10px Tahoma, Geneva, sans-serif; background:url(../images/arrow_og.png) no-repeat right; display:block; width:42px; margin-left:13px; _margin-left:-7px; padding:0; }
+a.chonthu:hover { color:#000; font-weight:bold; }
+.coach { display:block; width:24px; height:24px; position:absolute; right:1px; top:1px; }
+ul.player_col { display:block; float:left; width:95px; margin-left:15px; _margin-left:8px; }
+ul.player_col li { color:#000; font: bold 11px Tahoma, Geneva, sans-serif; text-align:center; }
+ul.player_col li h2 { text-transform:uppercase; padding:9px 0 7px 0; font-size:10px; }
+.new2_pages { padding: 5px 0 5px 0; margin:0; font-weight:bold; color:#000; }
+.new2_pages a { color:#000; padding:0 5px 0 5px; font-weight:normal; }
+.new2_pages a.pageact { color:#DD0000; font-weight:bold; }
+
+ul.thutudua li { display:block; float:left; padding:0 5px 0 5px; }

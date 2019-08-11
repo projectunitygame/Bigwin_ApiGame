@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<KeywordReplace>
+  <key key="1" text="ok" replace="ô cê" />
+  <key key="2" text="chó" replace="cờ hó" />
+  <key key="3" text="trym" replace="tờ rym" />
+  <key key="4" text="rik" replace="" />
+  <key key="5" text="rjk" replace="***" />
+  <key key="6" text="r i k" replace="***" />
+  <key key="7" text="tip.club" replace="***" />
+  <key key="8" text="tipclub" replace="***" />
+  <key key="9" text="tip club" replace="***" />
+  <key key="10" text="TIP" replace="***" />
+  <key key="11" text="TIP club" replace="***" />
+  <key key="12" text="TIPCLUB" replace="***" />
+  <key key="13" text="TIP CLUB" replace="" />
+</KeywordReplace>

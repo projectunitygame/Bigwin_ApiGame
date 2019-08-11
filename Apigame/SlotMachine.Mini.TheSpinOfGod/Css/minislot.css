@@ -1,0 +1,919 @@
+﻿@charset "utf-8";
+/* CSS Document */
+.khungpage a:hover, .khungpage a.mini_page_select {
+    color: #debc03 !important;
+    cursor: default;
+}
+
+.khungpage a {
+    padding: 0px 10px 0px 10px;
+    text-decoration: none;
+    font: bold 20px Arial, Helvetica, sans-serif;
+    color: #09C;
+    float: left;
+    line-height: 28px;
+}
+
+.mini {
+    background: url(../images/mini.png) no-repeat;
+    width: 64px;
+    height: 75px;
+    color: #fff;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    padding: 7px 21px 0 24px;
+    text-align: center;
+}
+
+.box_mini {
+    background: url(../images/zoom_out.png) no-repeat 5px 15px;
+    width: 210px;
+    height: 170px;
+    position: relative;
+}
+
+.clear {
+    clear: both;
+}
+
+a.opa {
+    opacity: 1;
+}
+
+    a.opa:hover {
+        opacity: 0.8;
+    }
+
+.help {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+}
+
+.bangvd {
+    position: absolute;
+    top: 0;
+    left: 32px;
+    z-index: 20;
+}
+
+.tl {
+    position: absolute;
+    top: 0;
+    left: 63px;
+    z-index: 20;
+}
+
+.nutdong {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    z-index: 30;
+}
+
+.tongsao {
+    position: absolute;
+    top: 30px;
+    left: 97px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    color: #fff;
+    width: 65px;
+    text-align: right;
+    z-index: 50;
+}
+
+.box_quay {
+    background: url(../images/bg_bt.png) no-repeat;
+    width: 176px;
+    height: 62px;
+    z-index: 50;
+    margin: 50px 0 0 16px;
+    float: left;
+    padding-left: 2px;
+}
+
+.muccuoc {
+    float: left;
+    padding: 15px 0 0 20px;
+    width: 105px;
+}
+
+.nut_quay {
+    float: left;
+    width: 65px;
+    padding-top: 3px;
+}
+
+.oquay {
+    float: left;
+    width: 50px;
+    text-align: center;
+    padding: 10px 0 0 6px;
+}
+
+.box_mucquay {
+    width: 176px;
+    height: 62px;
+    z-index: 50;
+    margin: 50px 0 0 16px;
+    float: left;
+    padding-left: 2px;
+}
+
+.chonmucquay {
+    float: left;
+    width: 50px;
+    text-align: center;
+    padding: 6px 0 0 5px;
+}
+
+.trungsao {
+    background: url(../images/bg_win.png) no-repeat;
+    width: 178px;
+    height: 62px;
+    position: absolute;
+    top: 50px;
+    left: 15px;
+}
+
+
+/* minislot 2*/
+.box_mini2 {
+    background: url(../images/minislot2.png) no-repeat;
+    width: 369px;
+    height: 234px;
+    position: absolute;
+}
+
+.help2 {
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    z-index: 20;
+}
+
+.bangvd2 {
+    position: absolute;
+    top: 0px;
+    left: 78px;
+    z-index: 20;
+}
+
+.tl2 {
+    position: absolute;
+    top: 0px;
+    left: 118px;
+    z-index: 20;
+}
+
+.xukingporker {
+    position: absolute;
+    top: 1px;
+    left: 258px;
+    z-index: 20;
+}
+
+    .xukingporker a {
+        background: url(../images/xu.png) bottom;
+        display: block;
+        width: 34px;
+        height: 34px;
+    }
+
+        .xukingporker a:hover, .xukingporker a.act {
+            background-position: top;
+        }
+
+.saokingporker {
+    position: absolute;
+    top: 1px;
+    left: 296px;
+    z-index: 20;
+}
+
+    .saokingporker a {
+        display: block;
+        background: url(../images/sao.png) bottom;
+        width: 33px;
+        height: 34px;
+    }
+
+        .saokingporker a:hover, .saokingporker a.act {
+            background-position: top;
+        }
+
+.nutdong2 {
+    position: absolute;
+    top: 45px;
+    right: 1px;
+    z-index: 30;
+}
+
+    .nutdong2 img {
+        width: 25px;
+        height: 25px;
+    }
+
+.tongsao2 {
+    background: url(../images/quysao.png) no-repeat;
+    text-align: center;
+    text-shadow: 1px 1px 1px #333;
+    padding-top: 5px;
+    height: 32px;
+    position: absolute;
+    top: 38px;
+    left: 158px;
+    font-family: 'UTM AVO';
+    font-size: 18px;
+    color: #feef00;
+    width: 154px;
+    z-index: 50;
+}
+
+.tongsao {
+    background: url(../images/quyxu.png) no-repeat;
+    text-align: center;
+    text-shadow: 1px 1px 1px #333;
+    padding-top: 5px;
+    height: 32px;
+    position: absolute;
+    top: 38px;
+    left: 158px;
+    font: 18px Arial, Helvetica, sans-serif;
+    color: #fff;
+    width: 154px;
+    z-index: 50;
+}
+
+#divanh img {
+    position: absolute;
+}
+
+.box_quay2 {
+    width: 200px;
+    height: 142px;
+    z-index: 100;
+    position: absolute;
+    top: 77px;
+    left: 133px;
+}
+
+.muccuoc2 {
+    position: absolute;
+    width: 89px;
+    top: 36px;
+    left: 39px;
+    z-index: 100;
+    height: 85px;
+}
+
+.cuoc100 {
+    margin: 0;
+    float: left;
+    width: 44px;
+    height: 44px;
+}
+
+    .cuoc100 a img {
+        display: block;
+        opacity: 0.4;
+    }
+
+    .cuoc100 a:hover img, .cuoc100 a.chon img {
+        opacity: 1;
+    }
+
+.nut_quay2 {
+    width: 91px;
+    top: 126px;
+    left: 36px;
+    position: absolute;
+    z-index: 100;
+}
+
+    .nut_quay2 a {
+        margin-bottom: 2px;
+        display: block;
+        height: 31px;
+    }
+
+.oquay2 {
+    float: left;
+    width: 44px;
+    text-align: center;
+    padding: 2px 5px 0 5px;
+}
+
+.box_mucquay2 {
+    width: 176px;
+    height: 62px;
+    z-index: 50;
+    margin: 50px 0 0 16px;
+    float: left;
+    padding-left: 2px;
+}
+
+.chonmucquay2 {
+    float: left;
+    width: 50px;
+    text-align: center;
+    padding: 6px 0 0 5px;
+}
+
+.trungsao2 {
+    background: url(../images/bg_win.png) no-repeat;
+    width: 178px;
+    height: 62px;
+    position: absolute;
+    top: 50px;
+    left: 15px;
+}
+
+.so {
+    position: absolute;
+    top: 68px;
+    left: 233px;
+    z-index: 200;
+    font: bold 16px "Myriad Pro", "Myriad Pro Cond", "Myriad Pro Light";
+    width: 20px;
+    text-align: center;
+}
+
+.chondong {
+    display: block;
+    width: 91px;
+    height: 30px;
+    background: url(../images/dong.png) no-repeat;
+    text-align: center;
+    font: bold 13px Arial, Helvetica, sans-serif;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    text-decoration: none;
+    line-height: 30px;
+}
+
+.datcuoc {
+    position: absolute;
+    width: 242px;
+    padding: 2px 3px;
+    border-radius: 10px;
+    background-color: #000;
+    z-index: 1000;
+    top: 35px;
+    height: 180px;
+    left: 34px;
+    padding: 5px 30px;
+}
+
+.text_dc {
+    padding: 0;
+    text-align: center;
+}
+
+.chonso {
+    padding: 3px 0 0 3px;
+    text-align: center;
+}
+
+.so1_click {
+    background: url(../images/chonso20_hov.png);
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so1 {
+    background: url(../images/chonso20.png);
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so1:hover {
+        background: url(../images/chonso20_hov.png);
+    }
+
+.so2_click {
+    background: url(../images/chonso20_hov.png) 185px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so2 {
+    background: url(../images/chonso20.png) 185px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so2:hover {
+        background: url(../images/chonso20_hov.png) 185px 0;
+    }
+
+.so3_click {
+    background: url(../images/chonso20_hov.png) 137px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so3 {
+    background: url(../images/chonso20.png) 137px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so3:hover {
+        background: url(../images/chonso20_hov.png) 137px 0;
+    }
+
+.so4_click {
+    background: url(../images/chonso20_hov.png) 90px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so4 {
+    background: url(../images/chonso20.png) 90px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so4:hover {
+        background: url(../images/chonso20_hov.png) 90px 0;
+    }
+
+.so5_click {
+    background: url(../images/chonso20_hov.png) 42px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so5 {
+    background: url(../images/chonso20.png) 42px 0;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so5:hover {
+        background: url(../images/chonso20_hov.png) 42px 0;
+    }
+
+.so6_click {
+    background: url(../images/chonso20_hov.png) 233px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so6 {
+    background: url(../images/chonso20.png) 233px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so6:hover {
+        background: url(../images/chonso20_hov.png) 233px 98px;
+    }
+
+.so7_click {
+    background: url(../images/chonso20_hov.png) 185px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so7 {
+    background: url(../images/chonso20.png) 185px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so7:hover {
+        background: url(../images/chonso20_hov.png) 185px 98px;
+    }
+
+.so8_click {
+    background: url(../images/chonso20_hov.png) 138px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so8 {
+    background: url(../images/chonso20.png) 138px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so8:hover {
+        background: url(../images/chonso20_hov.png) 138px 98px;
+    }
+
+.so9_click {
+    background: url(../images/chonso20_hov.png) 90px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so9 {
+    background: url(../images/chonso20.png) 90px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so9:hover {
+        background: url(../images/chonso20_hov.png) 90px 98px;
+    }
+
+.so10_click {
+    background: url(../images/chonso20_hov.png) 42px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so10 {
+    background: url(../images/chonso20.png) 42px 98px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so10:hover {
+        background: url(../images/chonso20_hov.png) 42px 98px;
+    }
+
+.so11_click {
+    background: url(../images/chonso20_hov.png) 233px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so11 {
+    background: url(../images/chonso20.png) 233px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so11:hover {
+        background: url(../images/chonso20_hov.png) 233px 65px;
+    }
+
+.so12_click {
+    background: url(../images/chonso20_hov.png) 185px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so12 {
+    background: url(../images/chonso20.png) 185px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so12:hover {
+        background: url(../images/chonso20_hov.png) 185px 65px;
+    }
+
+.so13_click {
+    background: url(../images/chonso20_hov.png) 138px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so13 {
+    background: url(../images/chonso20.png) 138px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so13:hover {
+        background: url(../images/chonso20_hov.png) 138px 65px;
+    }
+
+.so14_click {
+    background: url(../images/chonso20_hov.png) 90px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so14 {
+    background: url(../images/chonso20.png) 90px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so14:hover {
+        background: url(../images/chonso20_hov.png) 90px 65px;
+    }
+
+.so15_click {
+    background: url(../images/chonso20_hov.png) 42px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so15 {
+    background: url(../images/chonso20.png) 42px 65px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so15:hover {
+        background: url(../images/chonso20_hov.png) 42px 65px;
+    }
+
+.so16_click {
+    background: url(../images/chonso20_hov.png) 233px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so16 {
+    background: url(../images/chonso20.png) 233px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so16:hover {
+        background: url(../images/chonso20_hov.png) 233px 32px;
+    }
+
+.so17_click {
+    background: url(../images/chonso20_hov.png) 185px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so17 {
+    background: url(../images/chonso20.png) 185px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so17:hover {
+        background: url(../images/chonso20_hov.png) 185px 32px;
+    }
+
+.so18_click {
+    background: url(../images/chonso20_hov.png) 138px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so18 {
+    background: url(../images/chonso20.png) 138px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so18:hover {
+        background: url(../images/chonso20_hov.png) 138px 32px;
+    }
+
+.so19_click {
+    background: url(../images/chonso20_hov.png) 90px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so19 {
+    background: url(../images/chonso20.png) 90px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so19:hover {
+        background: url(../images/chonso20_hov.png) 90px 32px;
+    }
+
+.so20_click {
+    background: url(../images/chonso20_hov.png) 42px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+.so20 {
+    background: url(../images/chonso20.png) 42px 32px;
+    width: 42px;
+    height: 31px;
+    float: left;
+    margin: 0 3px 2px 3px;
+}
+
+    .so20:hover {
+        background: url(../images/chonso20_hov.png) 42px 32px;
+    }
+
+.padl {
+    padding: 0 2px;
+    margin: 0;
+}
+
+.line {
+    position: absolute;
+    width: 203px;
+    height: 146px;
+    top: 76px;
+    left: 133px;
+    z-index: 200;
+}
+
+.popup {
+    background-color: #163c74;
+    border-radius: 10px;
+    margin: 0 53px;
+    width: 550px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: -25px;
+}
+
+.pad7 {
+    margin-top: 7px;
+    background-color: #011a40;
+    border: solid 1px #135ea4;
+    border-radius: 6px;
+}
+
+.row1 {
+    background-color: #135ea4;
+    color: #fff;
+    text-align: center;
+    font: normal 14px Arial, Helvetica, sans-serif;
+}
+
+.row2 {
+    border-bottom: dotted 1px #135ea4;
+    color: #43e7ff;
+    font: 12px normal Arial, Helvetica, sans-serif;
+    text-align: center;
+    padding: 3px;
+}
+
+    .row2 a {
+        color: #fec500;
+        text-decoration: none;
+    }
+
+        .row2 a:hover {
+            text-decoration: underline;
+        }
+
+.tabsao {
+    position: absolute;
+    top: 80px;
+    left: -51px;
+}
+
+    .tabsao a {
+        background: url(../images/tabsao.png);
+        width: 61px;
+        height: 48px;
+        display: block;
+    }
+
+        .tabsao a:hover, .tabsao a.sel {
+            background-position: right;
+        }
+
+.tabxu {
+    position: absolute;
+    top: 130px;
+    left: -51px;
+}
+
+    .tabxu a {
+        background: url(../images/tabxu.png);
+        width: 61px;
+        height: 48px;
+        display: block;
+    }
+
+        .tabxu a:hover, .tabxu a.sel {
+            background-position: right;
+        }
+
+.khungpage {
+    padding: 10px 0;
+    margin: 0 auto;
+    width: 301px;
+    height: 14px;
+}
+
+.pagination {
+    padding: 0 3px 3px 3px;
+    margin: 0;
+}
+
+    .pagination ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        float: right;
+        height: 24px;
+    }
+
+    .pagination li {
+        padding: 0 10px;
+        display: block;
+        float: left;
+    }
+
+    .pagination a, .pagination a:visited {
+        padding: 2px;
+        text-decoration: none;
+        font: bold 20px Arial, Helvetica, sans-serif;
+        color: #09C;
+        float: left;
+        line-height: 28px;
+    }
+
+        .pagination a:hover {
+            color: #debc03;
+        }
+
+        .pagination a.currentpage {
+            color: #debc03 !important;
+            cursor: default;
+        }
+
+    .pagination img {
+        padding-top: 5px;
+    }

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetFeeByRange">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="start" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="end" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFeeByRangeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFeeByRangeResult" type="tns:ArrayOfGameFee" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfGameFee">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GameFee" nillable="true" type="tns:GameFee" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GameFee">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Day" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fees" type="tns:ArrayOfFeeByDay" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfFeeByDay">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FeeByDay" nillable="true" type="tns:FeeByDay" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FeeByDay">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="GameId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Fee" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRecentAccountMoneyStreamValue">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountId" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentAccountMoneyStreamValueResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetRecentAccountMoneyStreamValueResult" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAccountsMoneyStream">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accountIds" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAccountsMoneyStreamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAccountsMoneyStreamResult" type="tns:ArrayOfAccountMoneyStream" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAccountMoneyStream">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AccountMoneyStream" nillable="true" type="tns:AccountMoneyStream" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AccountMoneyStream">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AccountId" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="Money" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="CreatedDateInt" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAccountVIPPoint">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountId" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAccountVIPPointResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetAccountVIPPointResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetFeeByRangeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFeeByRange" />
+  </wsdl:message>
+  <wsdl:message name="GetFeeByRangeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFeeByRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentAccountMoneyStreamValueSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecentAccountMoneyStreamValue" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentAccountMoneyStreamValueSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecentAccountMoneyStreamValueResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountsMoneyStreamSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAccountsMoneyStream" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountsMoneyStreamSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAccountsMoneyStreamResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountVIPPointSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAccountVIPPoint" />
+  </wsdl:message>
+  <wsdl:message name="GetAccountVIPPointSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAccountVIPPointResponse" />
+  </wsdl:message>
+  <wsdl:portType name="FinancialSoap">
+    <wsdl:operation name="GetFeeByRange">
+      <wsdl:input message="tns:GetFeeByRangeSoapIn" />
+      <wsdl:output message="tns:GetFeeByRangeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentAccountMoneyStreamValue">
+      <wsdl:input message="tns:GetRecentAccountMoneyStreamValueSoapIn" />
+      <wsdl:output message="tns:GetRecentAccountMoneyStreamValueSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountsMoneyStream">
+      <wsdl:input message="tns:GetAccountsMoneyStreamSoapIn" />
+      <wsdl:output message="tns:GetAccountsMoneyStreamSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountVIPPoint">
+      <wsdl:input message="tns:GetAccountVIPPointSoapIn" />
+      <wsdl:output message="tns:GetAccountVIPPointSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FinancialSoap" type="tns:FinancialSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFeeByRange">
+      <soap:operation soapAction="http://tempuri.org/GetFeeByRange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentAccountMoneyStreamValue">
+      <soap:operation soapAction="http://tempuri.org/GetRecentAccountMoneyStreamValue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountsMoneyStream">
+      <soap:operation soapAction="http://tempuri.org/GetAccountsMoneyStream" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountVIPPoint">
+      <soap:operation soapAction="http://tempuri.org/GetAccountVIPPoint" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FinancialSoap12" type="tns:FinancialSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFeeByRange">
+      <soap12:operation soapAction="http://tempuri.org/GetFeeByRange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentAccountMoneyStreamValue">
+      <soap12:operation soapAction="http://tempuri.org/GetRecentAccountMoneyStreamValue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountsMoneyStream">
+      <soap12:operation soapAction="http://tempuri.org/GetAccountsMoneyStream" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountVIPPoint">
+      <soap12:operation soapAction="http://tempuri.org/GetAccountVIPPoint" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Financial">
+    <wsdl:port name="FinancialSoap" binding="tns:FinancialSoap">
+      <soap:address location="http://localhost:62207/Financial.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FinancialSoap12" binding="tns:FinancialSoap12">
+      <soap12:address location="http://localhost:62207/Financial.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

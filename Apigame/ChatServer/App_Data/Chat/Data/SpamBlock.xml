@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SpamBlock>
+  <key key="MaxLengthMessage" name="Độ dài tối đa của tin nhắn" value="125" description="" />
+  <key key="LimitSecond" name="Thời gian" value="5" description="" />
+  <key key="LimitMaxMessage" name="Số tin nhắn tối đa" value="1" description="" />
+</SpamBlock>

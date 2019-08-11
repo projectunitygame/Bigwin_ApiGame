@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D766761A-5AE9-42F7-B6F8-A09E55F7B9F1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SlotMachine.Mini.TheSpinOfGod</RootNamespace>
+    <AssemblyName>SlotMachine.Mini.TheSpinOfGod</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Css\mCustomScrollbar.css" />
+    <Content Include="Css\minislot.css" />
+    <Content Include="Css\popup.css" />
+    <Content Include="Css\reset.css" />
+    <Content Include="Css\vuabai.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="NLog.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\commonGame.js" />
+    <Content Include="Scripts\easeljs-0.8.1.combined.js" />
+    <Content Include="Scripts\easeljs-0.8.1.min.js" />
+    <Content Include="Scripts\GameHub.js" />
+    <Content Include="Scripts\HubManager.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Images\card1.png" />
+    <Content Include="Images\card2.png" />
+    <Content Include="Images\card3.png" />
+    <Content Include="Images\gg1.png" />
+    <Content Include="Images\gg2.png" />
+    <Content Include="Images\gg3.png" />
+    <Content Include="Images\huloc.png" />
+    <Content Include="Images\jocker.png" />
+    <Content Include="Images\noquy.png" />
+    <Content Include="Images\noquy1.png" />
+    <Content Include="Images\old\bangthanhtich.png" />
+    <Content Include="Images\old\bang_vd.png" />
+    <Content Include="Images\old\bg_black.png" />
+    <Content Include="Images\old\bo.png" />
+    <Content Include="Images\old\card1.png" />
+    <Content Include="Images\old\card2.png" />
+    <Content Include="Images\old\card3.png" />
+    <Content Include="Images\old\chan.png" />
+    <Content Include="Images\old\chitiet.png" />
+    <Content Include="Images\old\chonso20.png" />
+    <Content Include="Images\old\chonso20_hov.png" />
+    <Content Include="Images\old\close.png" />
+    <Content Include="Images\old\cuoc100.png" />
+    <Content Include="Images\old\cuoc1000.png" />
+    <Content Include="Images\old\cuoc10000.png" />
+    <Content Include="Images\old\cuoc10000_chon.png" />
+    <Content Include="Images\old\cuoc1000_chon.png" />
+    <Content Include="Images\old\cuoc100k_xu.png" />
+    <Content Include="Images\old\cuoc100_chon.png" />
+    <Content Include="Images\old\cuoc10k.png" />
+    <Content Include="Images\old\cuoc10k_xu.png" />
+    <Content Include="Images\old\cuoc1k.png" />
+    <Content Include="Images\old\cuoc1k_xu.png" />
+    <Content Include="Images\old\cuoc50k_xu.png" />
+    <Content Include="Images\old\cuoc5k.png" />
+    <Content Include="Images\old\datcuoc.png" />
+    <Content Include="Images\old\dong.png" />
+    <Content Include="Images\old\dongxxx.png" />
+    <Content Include="Images\old\dung.png" />
+    <Content Include="Images\old\dung2.png" />
+    <Content Include="Images\old\gg1.png" />
+    <Content Include="Images\old\gg2.png" />
+    <Content Include="Images\old\gg3.png" />
+    <Content Include="Images\old\help.png" />
+    <Content Include="Images\old\hotro.png" />
+    <Content Include="Images\old\huloc.png" />
+    <Content Include="Images\old\huongdan.png" />
+    <Content Include="Images\old\huongdanchoi.png" />
+    <Content Include="Images\old\jocker.png" />
+    <Content Include="Images\old\le.png" />
+    <Content Include="Images\old\left.png" />
+    <Content Include="Images\old\lichsu.png" />
+    <Content Include="Images\old\minislot2.png" />
+    <Content Include="Images\old\noquy.png" />
+    <Content Include="Images\old\noquy1.png" />
+    <Content Include="Images\old\nut_dong.png" />
+    <Content Include="Images\old\quay.png" />
+    <Content Include="Images\old\quay2.png" />
+    <Content Include="Images\old\quysao.png" />
+    <Content Include="Images\old\quyxu.png" />
+    <Content Include="Images\old\right.png" />
+    <Content Include="Images\old\sao.png" />
+    <Content Include="Images\old\saoxxx.png" />
+    <Content Include="Images\old\so1.png" />
+    <Content Include="Images\old\so10.png" />
+    <Content Include="Images\old\so11.png" />
+    <Content Include="Images\old\so12.png" />
+    <Content Include="Images\old\so13.png" />
+    <Content Include="Images\old\so14.png" />
+    <Content Include="Images\old\so15.png" />
+    <Content Include="Images\old\so16.png" />
+    <Content Include="Images\old\so17.png" />
+    <Content Include="Images\old\so18.png" />
+    <Content Include="Images\old\so19.png" />
+    <Content Include="Images\old\so2.png" />
+    <Content Include="Images\old\so20.png" />
+    <Content Include="Images\old\so3.png" />
+    <Content Include="Images\old\so4.png" />
+    <Content Include="Images\old\so5.png" />
+    <Content Include="Images\old\so6.png" />
+    <Content Include="Images\old\so7.png" />
+    <Content Include="Images\old\so8.png" />
+    <Content Include="Images\old\so9.png" />
+    <Content Include="Images\old\soJ.png" />
+    <Content Include="Images\old\soQ.png" />
+    <Content Include="Images\old\tabsao.png" />
+    <Content Include="Images\old\tabxu.png" />
+    <Content Include="Images\old\tatca.png" />
+    <Content Include="Images\old\thele.png" />
+    <Content Include="Images\old\thoat.png" />
+    <Content Include="Images\old\thutu.png" />
+    <Content Include="Images\old\tuquay.png" />
+    <Content Include="Images\old\tuquay2.png" />
+    <Content Include="Images\old\win.png" />
+    <Content Include="Images\old\win1.png" />
+    <Content Include="Images\old\winner.png" />
+    <Content Include="Images\old\winner1.png" />
+    <Content Include="Images\old\xu.png" />
+    <Content Include="Images\old\xuxxx.png" />
+    <Content Include="Images\so1.png" />
+    <Content Include="Images\so10.png" />
+    <Content Include="Images\so11.png" />
+    <Content Include="Images\so12.png" />
+    <Content Include="Images\so13.png" />
+    <Content Include="Images\so14.png" />
+    <Content Include="Images\so15.png" />
+    <Content Include="Images\so16.png" />
+    <Content Include="Images\so17.png" />
+    <Content Include="Images\so18.png" />
+    <Content Include="Images\so19.png" />
+    <Content Include="Images\so2.png" />
+    <Content Include="Images\so20.png" />
+    <Content Include="Images\so3.png" />
+    <Content Include="Images\so4.png" />
+    <Content Include="Images\so5.png" />
+    <Content Include="Images\so6.png" />
+    <Content Include="Images\so7.png" />
+    <Content Include="Images\so8.png" />
+    <Content Include="Images\so9.png" />
+    <Content Include="Images\soJ.png" />
+    <Content Include="Images\soQ.png" />
+    <Content Include="Images\vb_100k.png" />
+    <Content Include="Images\vb_100k_sao.png" />
+    <Content Include="Images\vb_10k.png" />
+    <Content Include="Images\vb_10k_sao.png" />
+    <Content Include="Images\vb_1k.png" />
+    <Content Include="Images\vb_1k_sao.png" />
+    <Content Include="Images\vb_50k.png" />
+    <Content Include="Images\vb_50k_sao.png" />
+    <Content Include="Images\vb_back.png" />
+    <Content Include="Images\vb_bongde.png" />
+    <Content Include="Images\vb_chat1.png" />
+    <Content Include="Images\vb_chat2.png" />
+    <Content Include="Images\vb_chat3.png" />
+    <Content Include="Images\vb_chat4.png" />
+    <Content Include="Images\vb_chat5.png" />
+    <Content Include="Images\vb_chat6.png" />
+    <Content Include="Images\vb_dungquay_btn_da.png" />
+    <Content Include="Images\vb_dung_btn.png" />
+    <Content Include="Images\vb_khungquay.png" />
+    <Content Include="Images\vb_khungquay_da.png" />
+    <Content Include="Images\vb_line1.png" />
+    <Content Include="Images\vb_line10.png" />
+    <Content Include="Images\vb_line11.png" />
+    <Content Include="Images\vb_line12.png" />
+    <Content Include="Images\vb_line13.png" />
+    <Content Include="Images\vb_line14.png" />
+    <Content Include="Images\vb_line15.png" />
+    <Content Include="Images\vb_line16.png" />
+    <Content Include="Images\vb_line17.png" />
+    <Content Include="Images\vb_line18.png" />
+    <Content Include="Images\vb_line19.png" />
+    <Content Include="Images\vb_line2.png" />
+    <Content Include="Images\vb_line20.png" />
+    <Content Include="Images\vb_line3.png" />
+    <Content Include="Images\vb_line4.png" />
+    <Content Include="Images\vb_line5.png" />
+    <Content Include="Images\vb_line6.png" />
+    <Content Include="Images\vb_line7.png" />
+    <Content Include="Images\vb_line8.png" />
+    <Content Include="Images\vb_line9.png" />
+    <Content Include="Images\vb_line_btn.png" />
+    <Content Include="Images\vb_quay_btn.png" />
+    <Content Include="Images\vb_quay_btn_da.png" />
+    <Content Include="Images\vb_quythuong.png" />
+    <Content Include="Images\vb_quythuong_da.png" />
+    <Content Include="Images\vb_tuquay_btn.png" />
+    <Content Include="Images\vb_tuquay_btn_da.png" />
+    <Content Include="Images\vb_ver2_bg_popup1.png" />
+    <Content Include="Images\vb_ver2_bg_popup2.png" />
+    <Content Include="Images\vb_ver2_bkg_da.png" />
+    <Content Include="Images\vb_ver2_bkg_sao.png" />
+    <Content Include="Images\vb_ver2_icon_bansao.png" />
+    <Content Include="Images\vb_ver2_icon_banxu.png" />
+    <Content Include="Images\vb_ver2_icon_cauhoi.png" />
+    <Content Include="Images\vb_ver2_icon_close.png" />
+    <Content Include="Images\vb_ver2_icon_cup.png" />
+    <Content Include="Images\vb_ver2_icon_info.png" />
+    <Content Include="Images\vb_ver2_tieude_bangthanhtich.png" />
+    <Content Include="Images\vb_ver2_tieude_lichsu.png" />
+    <Content Include="Images\vb_xong_btn.png" />
+    <Content Include="Images\win.png" />
+    <Content Include="Images\win1.png" />
+    <Content Include="Images\winner.png" />
+    <Content Include="Images\winner1.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery-jtemplates.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Scripts\js_vuabai.js" />
+    <Content Include="Scripts\mCustomScrollbar.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\pager.js" />
+    <Content Include="Scripts\preloadjs-0.6.1.combined.js" />
+    <Content Include="Scripts\preloadjs-0.6.1.min.js" />
+    <Content Include="Scripts\tweenjs-0.6.1.combined.js" />
+    <Content Include="Scripts\tweenjs-0.6.1.min.js" />
+    <Content Include="Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CachingHandler.cs" />
+    <Compile Include="Controllers\ConnectionHandler.cs" />
+    <Compile Include="Controllers\History.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HubVuabai.cs" />
+    <Compile Include="Controllers\NLogLogger.cs" />
+    <Compile Include="Controllers\TestApiController.cs" />
+    <Compile Include="Controllers\Utils.cs" />
+    <Compile Include="Controllers\VuaBaiApiController.cs" />
+    <Compile Include="Database\DAOImpl\EventDaoImpl.cs" />
+    <Compile Include="Database\DAOImpl\MiniGameImpl.cs" />
+    <Compile Include="Database\DAO\IEventDao.cs" />
+    <Compile Include="Database\DAO\IMinigame.cs" />
+    <Compile Include="Database\DTO\EventDTO.cs" />
+    <Compile Include="Database\DTO\SpinData.cs" />
+    <Compile Include="Database\Factory\AbstractDAOFactory.cs" />
+    <Compile Include="Database\Factory\ADODAOFactory.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConnectionString.cs" />
+    <Compile Include="Models\GameDAO.cs" />
+    <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\RoomConfig.cs" />
+    <Compile Include="Models\RoomJackpot.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{ba03d71a-59f2-47dc-aee8-98beee15e916}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50300</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50300/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

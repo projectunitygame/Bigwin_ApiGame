@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Game Vua bài slot</title>
+    <script src="Scripts/jquery-1.7.1.js"></script>
+    <script src="Scripts/jquery-ui-1.8.20.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="Scripts/tweenjs-0.6.1.combined.js"></script>
+    <script src="Scripts/easeljs-0.8.1.combined.js"></script>
+    <script src="Scripts/preloadjs-0.6.1.combined.js"></script>
+    <script src="Scripts/mCustomScrollbar.js"></script>
+    <script src="~/Scripts/commonGame.js"></script>
+    <script src="Scripts/js_vuabai.js"></script>
+    <script type="text/javascript" src="http://sandbox.uwingame.vn/phatlocheader/js/lib/jquery-jtemplates.js"></script>
+    <script type="text/javascript" src="http://sandbox.uwingame.vn/phatlocheader/js/header.js"></script>
+</head>
+<body>
+    <div id="divHeader"></div>
+    <div id="miniVuabai"></div>
+    <div id="miniVuabai1"></div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        miniVuabai.Init();
+        InitHeader();
+    });
+    InitHeader = function () {
+        var data = {
+            HeaderId: 'divHeader', // id thẻ header trên site game
+            IsLogin:false,  // true: nếu đã đăng nhập; false: chưa đăng nhập
+            UserName:'',  // tên tài khoản nếu đã đăng nhập
+            LoginUrl: 'http://sandbox.uwingame.vn/accounts/account.login.aspx?sid=100000' + '&ur=' + encodeURIComponent(miniVuabai.rootUrl) + '&m=1&continue=' + miniVuabai.rootUrl + 'Authen.aspx', // link login của site game
+            LogOutUrl: 'sso/logout.aspx', // link logout
+            Balance:1222222 // số dư sao của tài khoản(trả về khi login)
+        };
+        GlobalHeader.init(data);
+    };
+    </script>
+
+    @RenderBody()
+</body>
+</html>

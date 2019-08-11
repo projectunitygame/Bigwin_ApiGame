@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetCardConfigs">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetCardConfigsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCardConfigsResult" type="tns:ArrayOfCardConfig" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCardConfig">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CardConfig" nillable="true" type="tns:CardConfig" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CardConfig">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Type" type="tns:Telco" />
+          <s:element minOccurs="1" maxOccurs="1" name="Prize" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Enable" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="PayOrderConfig" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PartnerConfig" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="Telco">
+        <s:restriction base="s:string">
+          <s:enumeration value="VTT" />
+          <s:enumeration value="VMS" />
+          <s:enumeration value="VNP" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetCardConfigsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCardConfigs" />
+  </wsdl:message>
+  <wsdl:message name="GetCardConfigsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCardConfigsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="configSoap">
+    <wsdl:operation name="GetCardConfigs">
+      <wsdl:input message="tns:GetCardConfigsSoapIn" />
+      <wsdl:output message="tns:GetCardConfigsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="configSoap" type="tns:configSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCardConfigs">
+      <soap:operation soapAction="http://tempuri.org/GetCardConfigs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="configSoap12" type="tns:configSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCardConfigs">
+      <soap12:operation soapAction="http://tempuri.org/GetCardConfigs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="config">
+    <wsdl:port name="configSoap" binding="tns:configSoap">
+      <soap:address location="http://94.237.68.89:8029/config.asmx" />
+    </wsdl:port>
+    <wsdl:port name="configSoap12" binding="tns:configSoap12">
+      <soap12:address location="http://94.237.68.89:8029/config.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

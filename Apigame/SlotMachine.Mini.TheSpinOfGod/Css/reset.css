@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* uwin-Intecom Design Team
+Project name: Thập Nhị Tranh Tài - Version 3
+Javascript Framework: jQuery
+Version: 1.0
+Author: hai.phamtuan@uwin.vn
+Date created: 16.8.2012
+*/
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, blockquote, pre, em, font, img, small, strong, sub, sup, ul, ol, li, dl, dt, dd, fieldset, form, label, legend, tr, th, td, input, select, textarea {
+	margin:0;
+	padding:0;
+	border:0;
+	outline:0;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+}
+em {
+	font-style: italic;
+}
+strong {
+	font-weight: bold;
+}
+ul, ol {
+	list-style: none;
+}
+img, fieldset {
+	border:0;
+}
