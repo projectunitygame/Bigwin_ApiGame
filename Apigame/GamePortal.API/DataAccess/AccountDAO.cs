@@ -12,6 +12,25 @@ namespace GamePortal.API.DataAccess
 {
     public class AccountDAO
     {
+        public static bool CheckPhoneUsed(string phoneNumber)
+        {
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+                {
+                    new SqlParameter("@_phoneNumber", phoneNumber),
+                };
+                GetOtpFirst data = db.GetInstanceSP<GetOtpFirst>("SP_CheckPhoneUsed", pars.ToArray());
+                NLogManager.LogMessage("CheckPhoneUsed:"+data.ResponseCode+"=>"+phoneNumber);
+                return data.ResponseCode >= 1 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public static long FindAccountGameMap(long accountID, int gameID)
         {
             long code = -1;
@@ -405,6 +424,12 @@ namespace GamePortal.API.DataAccess
         {
             DBHelper db = new DBHelper(GateConfig.DbConfig);
             return db.GetInstance<Account>($"SELECT * from dbo.Account where [Username] = '{name}'");
+        }
+
+        public static Account GetAccountByTel(string tel)
+        {
+            DBHelper db = new DBHelper(GateConfig.DbConfig);
+            return db.GetInstance<Account>($"SELECT * from dbo.Account where [Tel] = '{tel}'");
         }
 
         public static dynamic GetAgencyInfo(long gameId)

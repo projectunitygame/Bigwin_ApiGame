@@ -31,6 +31,7 @@ namespace GamePortal.API.Models
         }
         public string Tel { get; set; }
         public bool IsOTP { get; set; }
+        public bool IsGetOtpFree { get; set; }
         public DateTime CreatedTime { get; set; }
         [JsonIgnore]
         public bool IsBlocked { get; set; }

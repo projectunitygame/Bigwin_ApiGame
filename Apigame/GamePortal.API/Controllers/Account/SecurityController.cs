@@ -3,11 +3,15 @@ using GamePortal.API.Models;
 using GamePortal.API.Models.AnotherLogic;
 using GamePortal.API.Models.SMS;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OTP;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -98,8 +102,12 @@ namespace GamePortal.API.Controllers.Account
                     return -54;
 
                 var accountId = AccountSession.AccountID;
+                NLogManager.LogMessage("UpdatePhoneNumber:" + phoneNumber + ":" + otp);
                 var account = AccountDAO.GetAccountById(AccountSession.AccountID);
-
+                if (AccountDAO.CheckPhoneUsed(phoneNumber))
+                {
+                    return -59;
+                }
                 if (!string.IsNullOrEmpty(account.Tel))
                 {
                     string p = account.Tel;
@@ -169,6 +177,65 @@ namespace GamePortal.API.Controllers.Account
             return -99;
         }
 
+        [HttpOptions, HttpGet]
+        public void GenerateOtpTelegram(string phoneNumber, string chatIdTele)
+        {
+            phoneNumber = phoneNumber.Substring(3);
+            phoneNumber = "0" + phoneNumber;
+            long accountID = AccountDAO.GetAccountByTel(phoneNumber).AccountID;
+            var otp = OTP.OTP.GenerateOTP(accountID, phoneNumber);
+            
+            NLogManager.LogMessage("GenerateOtpTelegram:" + phoneNumber + ":" + chatIdTele + ":" + otp);
+            //OtpTelegram otpTelegram = SecurityDAO.InsertOrUpdateOtp(phoneNumber, otp);
+            if (otp == "-70")
+            {
+                otp = "Sau 2 phút mới có thể lấy otp mới!";
+            }
+            else
+            {
+                otp = "OTP của bạn là : " + otp;
+            }
+            GET(string.Format("https://api.telegram.org/bot758314877:AAHZSrou7c9SyljCEf-tAKLDAt_QqK_JMDk/sendMessage?chat_id={0}&text={1}", chatIdTele, otp));
+        }
+
+
+        public JObject GET(string url, Dictionary<string, object> jObject = null)
+        {
+            JObject result = new JObject();
+            var sunbLink = "";
+            if (jObject != null)
+            {
+                sunbLink += "?";
+                foreach (var key in jObject.Keys)
+                {
+                    sunbLink = sunbLink + key + "=" + jObject[key] + "&";
+                }
+                sunbLink = sunbLink.Substring(0, sunbLink.Length - 1);
+            }
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + sunbLink);
+            try
+            {
+                WebResponse response = request.GetResponse();
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    string data = reader.ReadToEnd();
+                    result = JObject.Parse(data);
+                }
+            }
+            catch (WebException ex)
+            {
+                WebResponse errorResponse = ex.Response;
+                using (Stream responseStream = errorResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
+                    String errorText = reader.ReadToEnd();
+                }
+                throw;
+            }
+            return result;
+        }
+
         [Authorize, HttpOptions, HttpGet]
         public int ReceiveOTP(string phoneNumber = "")
         {
@@ -177,9 +244,13 @@ namespace GamePortal.API.Controllers.Account
                 NLogManager.LogMessage("ReceiveOTP: " + phoneNumber);
                 var account = AccountDAO.GetAccountById(AccountSession.AccountID);
                 NLogManager.LogMessage("ReceiveOTP: " + JsonConvert.SerializeObject(account));
-                //chua dang ky sdt
-                if (string.IsNullOrEmpty(account.Tel))
+
+                //chua lay otp 1 lan free
+                if (SecurityDAO.GetIsGetOtpFirst(account.AccountID).IsGetOtpFirst == 0)
                 {
+                    if (phoneNumber == "") {
+                        return -71;
+                    }
                     if (!PhoneDetector.IsValidPhone(phoneNumber))
                     {
                         NLogManager.LogMessage("FAIL PHONE: " + phoneNumber);
@@ -190,11 +261,8 @@ namespace GamePortal.API.Controllers.Account
                     var status = OTP.OTP.GenerateOTP(AccountSession.AccountID, phoneNumber);
                     NLogManager.LogMessage("OTP: " + status);
                     if (int.Parse(status) < 0) return int.Parse(status);
-                    bool deduct = TransactionDAO.DeductGold(account.AccountID, 1000, "Phí dịch vụ OTP", 2);
-                    NLogManager.LogMessage("DEDUCT OTP STATUS: " + deduct);
-                    if (!deduct)
-                        return -62;
                     //send the otp to phone
+                    SecurityDAO.UpdateIsGetOtpFirst(account.AccountID,true);
                     SmsService.SendMessage(phoneNumber, $"Ma xac nhan: " + status);
 
                     return 1;
@@ -214,7 +282,6 @@ namespace GamePortal.API.Controllers.Account
 
                     return 1;
                 }
-
             }
             catch (Exception ex)
             {

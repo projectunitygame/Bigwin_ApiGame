@@ -14,10 +14,36 @@ namespace OTP
         private static readonly DateTime UNIX_EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private static ConcurrentDictionary<long, OTPError> _cache = new ConcurrentDictionary<long, OTPError>();
 
+        public static string GenerateRandomOTP(int iOTPLength, string[] saAllowedCharacters)
+
+        {
+
+            string sOTP = String.Empty;
+
+            string sTempChars = String.Empty;
+
+            Random rand = new Random();
+
+            for (int i = 0; i < iOTPLength; i++)
+
+            {
+
+                int p = rand.Next(0, saAllowedCharacters.Length);
+
+                sTempChars = saAllowedCharacters[rand.Next(0, saAllowedCharacters.Length)];
+
+                sOTP += sTempChars;
+
+            }
+
+            return sOTP;
+
+        }
+
         public static string GenerateOTP(long accountId, string phonenumber = "")
         {
             OTPError err = null;
-
+            NLogManager.LogMessage("GenerateOTP:"+accountId+":"+phonenumber);
             if (!string.IsNullOrEmpty(phonenumber))
             {
                 if (_cache.TryGetValue(accountId, out err))

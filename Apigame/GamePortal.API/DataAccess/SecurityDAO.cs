@@ -11,6 +11,7 @@ namespace GamePortal.API.DataAccess
 {
     public class SecurityDAO
     {
+
         public static void ChangePassword(long accountId, string old, string pass)
         {
             DBHelper db = new DBHelper(GateConfig.DbConfig);
@@ -58,6 +59,15 @@ namespace GamePortal.API.DataAccess
             return true;
         }
 
+        public static bool UpdateIsGetOtpFirst(long accountId, bool isGetOtp = true)
+        {
+            DBHelper db = new DBHelper(GateConfig.DbConfig);
+            var status = isGetOtp ? 1 : 0;
+            NLogManager.LogMessage("UpdateIsGetOtpFirst:"+accountId+":"+status+":"+isGetOtp);
+            db.ExecuteNonQuery($"update dbo.Account set IsGetOtpFirst = '{status}' where AccountID = ${accountId}");
+            return true;
+        }
+
         public static bool UpdateAvatar(long accountId, int avatarId)
         {
             DBHelper db = new DBHelper(GateConfig.DbConfig);
@@ -99,6 +109,13 @@ namespace GamePortal.API.DataAccess
             currentGold = Convert.ToInt64(pars[4].Value);
 
             return true;
+        }
+
+        public static GetOtpFirst GetIsGetOtpFirst(long accountId)
+        {
+            DBHelper db = new DBHelper(GateConfig.DbConfig);
+
+            return db.GetInstance<GetOtpFirst>($"SELECT TOP 1 [IsGetOtpFirst]  FROM dbo.Account WHERE AccountId = {accountId}");
         }
 
         public static AccountOTPInfo GetOTPInfo(long accountId)
