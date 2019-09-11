@@ -50,13 +50,13 @@ namespace GamePortal.API.Controllers.Transaction
                 if(accountName.Length == 13 && accountName.Substring(0,5) == "UWIN.")
                 {
                     #region Chuyen gold to daily
-                    var accountSandbox = ConfigurationManager.AppSettings["AccountSandbox"].Split(',').ToList();
-                    NLogManager.LogMessage("accountSandbox: " + String.Join(",", accountSandbox));
+                    //var accountSandbox = ConfigurationManager.AppSettings["AccountSandbox"].Split(',').ToList();
+                    //NLogManager.LogMessage("accountSandbox: " + String.Join(",", accountSandbox));
                     //var accountId = AccountSession.AccountID;
-                    if (accountSandbox.Count > 0)
-                    {
-                        if (accountSandbox.Count(x => x == myAccount.AccountID.ToString()) > 0)
-                        {
+                    //if (accountSandbox.Count > 0)
+                    //{
+                        //if (accountSandbox.Count(x => x == myAccount.AccountID.ToString()) > 0)
+                        //{
                             int code = 0;
                             string msg = "";
                             string phone = "";
@@ -72,8 +72,8 @@ namespace GamePortal.API.Controllers.Transaction
                                 Models.SMS.SmsService.SendMessage(phone, "yeu cau chuyen tien " + myAccount.Username + " so tien " + formatMoney(amount));
                             }
                             return code == 1 ? d.Balance : code;
-                        }
-                    }
+                        //}
+                    //}
                     #endregion
                 }
                 else

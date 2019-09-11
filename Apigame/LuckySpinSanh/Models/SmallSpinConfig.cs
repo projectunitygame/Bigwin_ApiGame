@@ -15,4 +15,9 @@ namespace LuckySpinSanh.Models
         public string Description { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class AccountInfo
+    {
+        public string Tel { get; set; }
+    }
 }

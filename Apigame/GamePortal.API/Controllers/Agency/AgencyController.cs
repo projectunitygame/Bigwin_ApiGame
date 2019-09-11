@@ -18,16 +18,16 @@ namespace GamePortal.API.Controllers.Agency
             {
                 if(!string.IsNullOrEmpty(ConfigurationManager.AppSettings["CloseAgencies"]))
                     return new List<Models.Agency>();
-                var accountSandbox = ConfigurationManager.AppSettings["AccountSandbox"].Split(',').ToList();
-                var accountId = AccountSession.AccountID;
-                if (accountSandbox.Count() > 0)
-                {
-                    if (accountSandbox.Count(x => x == accountId.ToString()) > 0)
-                    {
+                //var accountSandbox = ConfigurationManager.AppSettings["AccountSandbox"].Split(',').ToList();
+                //var accountId = AccountSession.AccountID;
+                //if (accountSandbox.Count() > 0)
+                //{
+                    //if (accountSandbox.Count(x => x == accountId.ToString()) > 0)
+                    //{
                         return AgencyDAO.GetAllAgency_v1();
-                    }
-                }
-                return AgencyDAO.GetAllAgency();
+                    //}
+                //}
+                //return AgencyDAO.GetAllAgency();
             }
             catch (Exception ex)
             {

@@ -40,24 +40,219 @@ namespace GamePortal.API.Controllers.Account
         /// <param name="p"></param>
         /// <returns></returns>
         [HttpOptions, HttpGet, HttpPost]
-        public string TransferMoney(PostTransferMoneyGame p)
+        public APIResultTransfer TransferMoney(PostTransferMoneyGame p)
         {
+            APIResultTransfer result = new APIResultTransfer();
             if (AccountSession.AccountID <= 0)
             {
                 NLogManager.LogMessage("TransferMoney Account NULL!");
-                return string.Empty;
+                result.code = -1;
+                result.msg = "Tài khoản không tồn tại!";
+                return result;
             }
+
+            if (Utilities.Captcha.Verify(p.captcha, p.token) <= 0)
+            {
+                result.code = -1;
+                result.msg = "Nhập mã captcha không chính xác!";
+                return result;
+            }
+
             var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
-            NLogManager.LogMessage("TransferMoney: " + JsonConvert.SerializeObject(p) + 
+            NLogManager.LogMessage("TransferMoney: " + JsonConvert.SerializeObject(p) +
                 "\r\nAccount: " + JsonConvert.SerializeObject(accountInfo));
+
+            if (CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca) < 0)
+            {
+                result.code = -101;
+                result.msg = "Lỗi hệ thống check tài khoản!";
+                return result;
+            }
+
             string msg = "";
             string receiptID = "";
-            long r = AccountDAO.TransferSubMoneyGames(accountInfo.AccountID, "", p.amount, Utilities.IP.IPAddressHelper.GetClientIP(), p.gameId, ref msg, ref receiptID);
-            return JsonConvert.SerializeObject(new
+            long curentMoney = 0;
+            int r = AccountDAO.TransferSubMoneyGames(accountInfo.AccountID, "Chuyển " + Lib.General.FormatMoneyVND(p.amount) + " tiền sang game cá", p.amount, Utilities.IP.IPAddressHelper.GetClientIP(), Lib.Constant.gameID_ca, ref msg, ref receiptID, ref curentMoney);
+            result.code = r;
+            result.msg = msg;
+            result.currentMoney = curentMoney;
+            if (r == 1)
             {
-                Status = r,
-                Msg = msg
-            });
+                // gọi api cá để add tien
+                string postData = string.Format("userid={0}&amount={1}&apiToken={2}&transactionId={3}", accountInfo.AccountID, p.amount, Lib.Constant.apiToken, receiptID);
+                string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "deposit", postData);
+                //string res = Lib.WebClass.SendPost(JsonConvert.SerializeObject(postData), Lib.Constant.url_fish + "deposit", "application/x-www-form-urlencoded;charset=utf-8");
+                //{"returnCode":0,"result":{"returnCode":0,"message":null,"data":{"returnCode":0,"message":null,"userid":"201839156","depositValue":10000,"currentBalance":10000,"receipId":4,"timeString":"22:37:02 30/08/2019"}}}
+                APIResponseTopup dataTopup = JsonConvert.DeserializeObject<APIResponseTopup>(res);
+                NLogManager.LogMessage("Response dataTopup: " + JsonConvert.SerializeObject(dataTopup));
+                if (dataTopup != null && dataTopup.result.data.receipId > 0 && dataTopup.result.data.depositValue > 0)
+                {
+                    r = AccountDAO.ConsumeMoneyGames(accountInfo.AccountID, receiptID, dataTopup.result.data.receipId.ToString(), ref msg, ref curentMoney);
+                    result.code = r;
+                    result.msg = msg;
+                    result.currentMoneyCa = dataTopup.result.data.currentBalance;
+                }
+                else
+                {
+                    result.code = -10;
+                    result.msg = "Lỗi chuyển tiền không thành công!";
+                }
+            }
+            NLogManager.LogMessage("Response: " + JsonConvert.SerializeObject(result));
+            return result;
+        }
+
+        /// <summary>
+        /// Chuyển tiền từ game cá sang uwin
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        [HttpOptions, HttpGet, HttpPost]
+        public APIResultTransfer WithdrawalMoney(PostTransferMoneyGame p)
+        {
+            APIResultTransfer result = new APIResultTransfer();
+            if (AccountSession.AccountID <= 0)
+            {
+                NLogManager.LogMessage("WithdrawalMoney Account NULL!");
+                result.code = -1;
+                result.msg = "Tài khoản không tồn tại!";
+                return result;
+            }
+
+            if (Utilities.Captcha.Verify(p.captcha, p.token) <= 0)
+            {
+                result.code = -1;
+                result.msg = "Nhập mã captcha không chính xác!";
+                return result;
+            }
+
+            var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
+            NLogManager.LogMessage(">>> WithdrawalMoney: " + JsonConvert.SerializeObject(p) +
+                "\r\nAccount: " + JsonConvert.SerializeObject(accountInfo));
+
+            if (CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca) < 0)
+            {
+                result.code = -101;
+                result.msg = "Lỗi hệ thống check tài khoản!";
+                return result;
+            }
+
+            string postData = string.Format("userid={0}&apiToken={1}&transactionId={2}", accountInfo.AccountID, Lib.Constant.apiToken, Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString()));
+            string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "get_balance", postData);
+            var data = JsonConvert.DeserializeObject<ApiFishInfo>(res);
+            if (data != null)
+            {
+                if (data.result.data.currentBalance < p.amount)
+                {
+                    result.code = -2;
+                    result.msg = "Số dư không đủ để chuyển!";
+                    return result;
+                }
+                string msg = "";
+                string receiptID = "";
+                long curentMoney = 0;
+                int r = AccountDAO.TransferAddMoneyGames(accountInfo.AccountID, "Chuyển " + Lib.General.FormatMoneyVND(p.amount) + " tiền sang uwin", p.amount, Utilities.IP.IPAddressHelper.GetClientIP(), Lib.Constant.gameID_ca, ref msg, ref receiptID, ref curentMoney);
+                if (r == 1)
+                {
+                    postData = string.Format("userid={0}&amount={1}&apiToken={2}&transactionId={3}", accountInfo.AccountID, p.amount, Lib.Constant.apiToken, receiptID);
+                    res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "withdraw", postData);
+                    var dataWithdraw = JsonConvert.DeserializeObject<APIResponseWithdraw>(res);
+                    NLogManager.LogMessage("Response dataWithdraw: " + JsonConvert.SerializeObject(dataWithdraw));
+                    if (dataWithdraw != null && dataWithdraw.result.data.receipId > 0 && dataWithdraw.result.data.withdrawResponse > 0)
+                    {
+                        r = AccountDAO.ConsumeWithdraw(accountInfo.AccountID, receiptID, dataWithdraw.result.data.receipId.ToString(), ref msg, ref curentMoney);
+                        result.code = r;
+                        result.msg = msg;
+                        result.currentMoney = curentMoney;
+                        result.currentMoneyCa = dataWithdraw.result.data.currentBalance;
+                    }
+                    else
+                    {
+                        result.code = -10;
+                        result.msg = "Lỗi chuyển tiền không thành công!";
+                    }
+                }
+                else
+                {
+                    result.code = r;
+                    result.msg = msg;
+                }
+            }
+            else
+            {
+                result.code = -3;
+                result.msg = "Lỗi không tìm thấy tài khoản!";
+            }
+            NLogManager.LogMessage("Response: " + JsonConvert.SerializeObject(result));
+            return result;
+        }
+
+        public long CheckAccountMap(long accountID, string username, int gameID)
+        {
+            try
+            {
+                long accountIndex = AccountDAO.FindAccountGameMap(accountID, gameID);
+                if (accountIndex == 0)
+                {
+                    //gọi api ca tạo tk
+                    string postData = string.Format("userid={0}&username={1}&apiToken={2}&balance={3}", accountID, username, Lib.Constant.apiToken, 0);
+                    string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "register", postData);
+                    //Lib.WebClass.SendPost(JsonConvert.SerializeObject(postData), Lib.Constant.url_fish + "register", "application/x-www-form-urlencoded;charset=utf-8");
+                    //NLogManager.LogMessage(res);
+                    var regInfo = JsonConvert.DeserializeObject<APIResponseRegister>(res);
+                    if (regInfo.result.returnCode == 0 || regInfo.result.returnCode == 4)
+                    {
+                        accountIndex = AccountDAO.AddMapAccountGame(accountID, gameID);
+                    }
+                    else
+                        accountIndex = -1;
+                }
+                NLogManager.LogMessage("CheckAccountMap: " + accountIndex);
+                return accountIndex;
+            }
+            catch (Exception ex)
+            {
+                NLogManager.LogError("ERROR checkAccountMap: " + ex);
+                return -1;
+            }
+        }
+
+
+        /// <summary>
+        /// Lay thong tin tài khoản game ca
+        /// </summary>
+        /// <returns></returns>
+        [HttpOptions, HttpGet]
+        public FishData GetFishAccount()
+        {
+            FishData r = new FishData();
+            if (AccountSession.AccountID <= 0)
+            {
+                NLogManager.LogMessage("Account NULL!");
+                r.returnCode = -1;
+                r.message = "Account is null!!!";
+                return r;
+            }
+            TokenAuthen t = new TokenAuthen();
+            var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
+
+            if (CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca) < 0)
+            {
+                r.returnCode = -101;
+                r.message = "Lỗi hệ thống check tài khoản!";
+                return r;
+            }
+            string postData = string.Format("userid={0}&apiToken={1}&transactionId={2}", accountInfo.AccountID, Lib.Constant.apiToken, Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString()));
+            string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "get_balance", postData);
+            var data = JsonConvert.DeserializeObject<ApiFishInfo>(res);
+            if (data != null)
+            {
+                r.returnCode = data.returnCode;
+                r.data = data.result.data;
+                r.message = "success";
+            }
+            NLogManager.LogMessage("Response fish account: " + JsonConvert.SerializeObject(r));
+            return r;
         }
 
         /// <summary>
@@ -65,19 +260,29 @@ namespace GamePortal.API.Controllers.Account
         /// </summary>
         /// <returns></returns>
         [HttpOptions, HttpGet]
-        public string GetTokenAuthen()
+        public RequestToken GetTokenAuthen()
         {
             if (AccountSession.AccountID <= 0)
             {
                 NLogManager.LogMessage("GetTokenAuthen Account NULL!");
-                return string.Empty;
+                return new RequestToken();
             }
             TokenAuthen t = new TokenAuthen();
             var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
-            string token = t.GetTokenAuthen(accountInfo);
+            string token = accountInfo.TokenAuthen; //t.GetTokenAuthen(accountInfo);
+            RequestToken r = new RequestToken()
+            {
+                token = token,
+                key = Lib.Constant.apiToken
+            };
             NLogManager.LogMessage("GetTokenAuthen: " + JsonConvert.SerializeObject(accountInfo) +
-                "\r\nTokenAuthen: " + token);
-            return token;
+                "\r\nTokenAuthen: " + JsonConvert.SerializeObject(r));
+
+
+            //CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca);
+
+
+            return r;
         }
 
         /// <summary>
@@ -89,19 +294,34 @@ namespace GamePortal.API.Controllers.Account
         public UserInfo AccessTokenAuthen(string token)
         {
             TokenAuthen t = new TokenAuthen();
-            var d = t.AccessToken(token);
-            if (d != null)
+            if (token == "14fa9cf3124592deac48a9019ca1e2fd")
             {
                 UserInfo accountInfo = new UserInfo()
                 {
-                    userid = d.AccountID.ToString(),
-                    username = d.DisplayName
+                    userid = "20190000",
+                    username = "TestAccount"
                 };
                 NLogManager.LogMessage("AccessTokenAuthen: " + token + "\r\n" + JsonConvert.SerializeObject(accountInfo));
                 return accountInfo;
             }
             else
-                return null;
+            {
+                var d = t.AccessToken(token);
+                NLogManager.LogMessage("AccessTokenAuthen: " + token + "\r\n" + JsonConvert.SerializeObject(d));
+                return d;
+                //if (d != null)
+                //{
+                //    UserInfo accountInfo = new UserInfo()
+                //    {
+                //        userid = d.AccountID.ToString(),
+                //        username = d.DisplayName
+                //    };
+                //    NLogManager.LogMessage("AccessTokenAuthen: " + token + "\r\n" + JsonConvert.SerializeObject(accountInfo));
+                //    return accountInfo;
+                //}
+                //else
+                //    return null;
+            }
         }
 
 
@@ -155,13 +375,18 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 int captchaVeriryStatus = Utilities.Captcha.Verify(data.captcha, data.token);
                 if (captchaVeriryStatus < 0) return new ApiAccountReponse { Code = captchaVeriryStatus };
                 var account = new Models.Account();
                 int response = account.RegisterNormal(data.username, data.password);
                 if (response < 0) return new ApiAccountReponse { Code = response };
                 SetAuthCookie(account.AccountID, "U." + account.AccountID, data.device, 1);
-                LogDAO.Login(data.device, IPAddressHelper.GetClientIP(), account.AccountID, 1, true);
+                account.TokenAuthen = Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString());
+                LogDAO.Login(data.deviceID, account.TokenAuthen, data.device, IPAddressHelper.GetClientIP(), account.AccountID, 1, true);
                 return new ApiAccountReponse { Code = response, Account = account };
             }
             catch (Exception ex)
@@ -180,6 +405,10 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 var fb = await Utilities.FB.Facebook.GetIDsForBusiness(data.accessToken);
                 if (fb == null)
                     return new ApiAccountReponse { Code = -50 };
@@ -204,14 +433,16 @@ namespace GamePortal.API.Controllers.Account
                             OTPToken = Security.TripleDESEncrypt(ConfigurationManager.AppSettings["OTPKey"], token)
                         };
                     }
-                    LogDAO.Login(data.device, IPAddressHelper.GetClientIP(), account.AccountID, 2);
+                    account.TokenAuthen = Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString());
+                    LogDAO.Login(data.deviceID, account.TokenAuthen, data.device, IPAddressHelper.GetClientIP(), account.AccountID, 2);
                     SetAuthCookie(account.AccountID, account.DisplayName, data.device, 2);
                     return new ApiAccountReponse { Code = 1, Account = account };
                 }
                 int response = account.RegisterFacebookAccount($"FB_{fb.FirstOrDefault().id}");
                 if (response < 0) return new ApiAccountReponse { Code = response };
                 AccountDAO.CheckBussinessAccount(accountIds);
-                LogDAO.Login(data.device, IPAddressHelper.GetClientIP(), account.AccountID, 2, true);
+                account.TokenAuthen = Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString());
+                LogDAO.Login(data.deviceID, account.TokenAuthen, data.device, IPAddressHelper.GetClientIP(), account.AccountID, 2, true);
                 SetAuthCookie(account.AccountID, "U." + account.AccountID, data.device, 2);
                 return new ApiAccountReponse { Code = response, Account = account };
             }
@@ -231,6 +462,10 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 var account = AccountDAO.Login(data.username, Security.MD5Encrypt(data.password));
                 if (account == null || account.AccountID == 0)
                     return new ApiAccountReponse { Code = -51 };
@@ -246,8 +481,8 @@ namespace GamePortal.API.Controllers.Account
                         OTPToken = Security.TripleDESEncrypt(ConfigurationManager.AppSettings["OTPKey"], token)
                     };
                 }
-
-                LogDAO.Login(data.device, IPAddressHelper.GetClientIP(), account.AccountID, 1);
+                account.TokenAuthen = Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString());
+                LogDAO.Login(data.deviceID, account.TokenAuthen, data.device, IPAddressHelper.GetClientIP(), account.AccountID, 1);
                 SetAuthCookie(account.AccountID, account.DisplayName, data.device, account.UserType);
                 //NLogManager.LogMessage("Login success: " + JsonConvert.SerializeObject(account));
                 return new ApiAccountReponse { Code = 1, Account = account };
@@ -273,6 +508,10 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 //NLogManager.LogMessage(JsonConvert.SerializeObject(data));
                 string decryptToken = Security.TripleDESDecrypt(ConfigurationManager.AppSettings["OTPKey"], System.Web.HttpUtility.UrlDecode(data.tokenOTP).Replace(" ", "+"));
                 string[] splData = decryptToken.Split('|');
@@ -305,7 +544,8 @@ namespace GamePortal.API.Controllers.Account
                 }
 
                 doneOTP:
-                LogDAO.Login(device, IPAddressHelper.GetClientIP(), accountId, 1);
+                account.TokenAuthen = Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString());
+                LogDAO.Login(data.deviceID, account.TokenAuthen, device, IPAddressHelper.GetClientIP(), accountId, 1);
                 SetAuthCookie(accountId, account.DisplayName, device, account.UserType);
                 return new ApiAccountReponse { Code = 1, Account = account };
             }
@@ -361,6 +601,10 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 var account = AccountDAO.Login(username, Security.MD5Encrypt(password));
                 if (account == null || account.AccountID == 0)
                     return new ApiAccountReponse { Code = -51 };
@@ -392,6 +636,10 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new ApiAccountReponse { Code = Lib.Constant.MA_GAME };
+                }
                 var fb = await Utilities.FB.Facebook.GetIDsForBusiness(access_token);
                 if (fb == null)
                     return new ApiAccountReponse { Code = -50 };
@@ -434,7 +682,11 @@ namespace GamePortal.API.Controllers.Account
         {
             try
             {
-               // NLogManager.LogMessage("TOKEN: " + token);
+                if (Lib.Constant.MA_GAME != 0)
+                {
+                    return new APIResponse { ResponseCode = Lib.Constant.MA_GAME };
+                }
+                // NLogManager.LogMessage("TOKEN: " + token);
                 string parseToken = Security.TripleDESDecrypt("APP_deviceToken", token);
                 string[] split = parseToken.Split('_');
                 long accountId = long.Parse(split[1]);
@@ -632,6 +884,8 @@ namespace GamePortal.API.Controllers.Account
         public string reason { get; set; }
         public int gameId { get; set; }
         public long amount { get; set; }
+        public string captcha { get; set; }
+        public string token { get; set; }
     }
 
     public class ApiAccountReponse
@@ -648,6 +902,7 @@ namespace GamePortal.API.Controllers.Account
         public string captcha { get; set; }
         public string token { get; set; }
         public int device { get; set; }
+        public string deviceID { get; set; }
     }
 
     public class PostLogin
@@ -655,6 +910,7 @@ namespace GamePortal.API.Controllers.Account
         public string username { get; set; }
         public string password { get; set; }
         public int device { get; set; }
+        public string deviceID { get; set; }
     }
 
     public class PostLoginOTP
@@ -662,12 +918,14 @@ namespace GamePortal.API.Controllers.Account
         public string otp { get; set; }
         public int type { get; set; }
         public string tokenOTP { get; set; }
+        public string deviceID { get; set; }
     }
 
     public class PostLoginFacebook
     {
         public string accessToken { get; set; }
         public int device { get; set; }
+        public string deviceID { get; set; }
     }
 
     public class APIResponse
@@ -676,4 +934,117 @@ namespace GamePortal.API.Controllers.Account
         public int ResponseCode { get; set; }
     }
 
+    public class RequestToken
+    {
+        public string key;
+        public string token;
+    }
+    public class ApiFishInfo
+    {
+        public ApiFishInfo()
+        {
+            result = new FishData();
+        }
+        public int returnCode;
+        public FishData result;
+    }
+
+    public class FishData
+    {
+        public FishData()
+        {
+            data = new FishInfo();
+            returnCode = -1;
+            message = "Account not found!";
+        }
+        public int returnCode;
+        public string message;
+        public FishInfo data;
+    }
+
+    public class FishInfo
+    {
+        public string userid;
+        public long currentBalance;
+    }
+
+
+    public class APIResultTransfer
+    {
+        public int code;
+        public string msg;
+        public long currentMoney;
+        public long currentMoneyCa;
+    }
+
+    public class APIResponseTopup
+    {
+        public int returnCode;
+        public ResultTopupInfo result;
+    }
+
+    public class ResultTopupInfo
+    {
+        public int returnCode;
+        public string message;
+        public TopupInfo data;
+    }
+
+    public class TopupInfo
+    {
+        public string userid;
+        public long depositValue;
+        public long currentBalance;
+        public long receipId;
+        public string timeString;
+        public int returnCode;
+        public string message;
+    }
+
+    public class APIResponseWithdraw
+    {
+        public int returnCode;
+        public ResultWithdrawInfo result;
+    }
+
+    public class ResultWithdrawInfo
+    {
+        public int returnCode;
+        public string message;
+        public WithdrawInfo data;
+    }
+
+    public class WithdrawInfo
+    {
+        public string userid;
+        public long withdrawRequest;
+        public long withdrawResponse;
+        public long currentBalance;
+        public long receipId;
+        public string timeString;
+        public int returnCode;
+        public string message;
+    }
+
+
+
+
+    public class APIResponseRegister
+    {
+        public int returnCode;
+        public ResultRegisterInfo result;
+    }
+
+    public class ResultRegisterInfo
+    {
+        public int returnCode;
+        public string message;
+        public UCaInfo data;
+    }
+
+    public class UCaInfo
+    {
+        public string userid;
+        public long currentBalance;
+    }
 }

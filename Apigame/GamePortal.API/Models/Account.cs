@@ -17,7 +17,7 @@ namespace GamePortal.API.Models
     }
     public class Account
     {
-        public string tokenAuthen { get; set; }//update 06-08-2019 - TD
+        public string TokenAuthen { get; set; }//update 06-08-2019 - TD
         public long AccountID { get; set; }
         public string Username { get; set; }
         public string DisplayName { get; set; }

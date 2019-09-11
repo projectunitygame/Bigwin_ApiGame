@@ -18,6 +18,24 @@ namespace LuckySpinSanh.Database
         public static string connectionString = ConnectionStringUtil.Decrypt(ConfigurationManager.ConnectionStrings["LuckySpin"].ConnectionString);
         public static int defaultChance = Convert.ToInt32(ConfigurationManager.AppSettings["DefaultChance"]);
 
+        public static string GetAccountTelInfo(long accountId)
+        {
+            try
+            {
+                DBHelper db = new DBHelper(conPortalString);
+
+                var dt = db.GetList<AccountInfo>($"select ISNULL(Tel,'') as Tel from dbo.Account where AccountId = {accountId}");
+                if (dt.Count > 0)
+                    return dt.Last().Tel;
+                else
+                    return "";
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
         public static List<SmallSpinConfig> GetSmallSpinConfig(byte flow)
         {
             var db = new DBHelper(connectionString);

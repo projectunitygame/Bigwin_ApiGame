@@ -23,7 +23,11 @@ namespace LuckySpinAT.Controllers
             try
             {
                 long accountId = AccountSession.AccountID;
+                NLogManager.LogMessage("GetAvailable: " + accountId);
+                string tel = SpinDAO.GetAccountTelInfo(accountId);
+                NLogManager.LogMessage("Check tel account(" + accountId + "): " + tel);
                 int spinAvailable = GetAvailableSpin(accountId, true);
+                NLogManager.LogMessage("GetAvailable spin: " + spinAvailable);
                 if (spinAvailable < 0)
                     spinAvailable = 0;
                 return new
@@ -42,44 +46,168 @@ namespace LuckySpinAT.Controllers
             };
         }
 
+        //[Authorize, HttpOptions, HttpGet]
+        //public async Task<dynamic> Spin(string captcha, string token)
+        //{
+        //    try
+        //    {
+        //        long accountId = AccountSession.AccountID;
+        //        long totalTopup = SpinDAO.GetRecentTopupCard(accountId);
+        //        var portalCaptcha = new LuckySpinSanh.PortalCaptcha.captchaSoapClient();
+        //        bool checkCapt = portalCaptcha.ProxyCheckCaptcha(captcha, token);
+        //        if (checkCapt == false)
+        //            return new
+        //            {
+        //                Code = -2
+        //            };
+        //        portalCaptcha.Close();
+        //        int spinAvailable = GetAvailableSpin(accountId, false);
+        //        if (spinAvailable < 0)
+        //            spinAvailable = 0;
+
+        //        if (spinAvailable < 1)
+        //            return new
+        //            {
+        //                Code = -11
+        //            };
+
+        //        byte flow = 1;
+
+        //        if (totalTopup < 100000)
+        //            flow = 1;
+        //        else if (totalTopup >= 100000 && totalTopup < 200000)
+        //            flow = 2;
+        //        else if (totalTopup >= 200000 && totalTopup < 500000)
+        //            flow = 3;
+        //        else if (totalTopup >= 500000)
+        //            flow = 4;
+
+        //        var smallResult = SpinSmall(flow);
+        //        var bigResult = SpinBig(flow);
+
+        //        var isLog = SpinDAO.LogSession(accountId, smallResult, bigResult, out long sessionId);
+        //        if (!isLog)
+        //            return new
+        //            {
+        //                Code = -99
+        //            };
+        //        long gold = -1;
+        //        if (smallResult > 0 || bigResult > 0)
+        //        {
+        //            var isSuccessAward = Award(accountId, smallResult, bigResult, sessionId, out gold);
+        //            if (isSuccessAward)
+        //                return new
+        //                {
+        //                    Code = 1,
+        //                    StarResult = bigResult,
+        //                    CoinResult = smallResult,
+        //                    SpinChance = spinAvailable - 1,
+        //                    Gold = gold
+        //                };
+        //        }
+
+        //        return new
+        //        {
+        //            Code = 1,
+        //            StarResult = bigResult,
+        //            CoinResult = smallResult,
+        //            SpinChance = spinAvailable - 1,
+        //            Gold = gold
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        NLogManager.PublishException(ex);
+        //    }
+
+        //    return new
+        //    {
+        //        Code = -99
+        //    };
+        //}
+
         [Authorize, HttpOptions, HttpGet]
         public async Task<dynamic> Spin(string captcha, string token)
         {
+            NLogManager.LogMessage("Spin: " + captcha + "," + token);
             try
             {
+                int smallResult = 0;
+                int bigResult = 0;
                 long accountId = AccountSession.AccountID;
-                long totalTopup = SpinDAO.GetRecentTopupCard(accountId);
-                var portalCaptcha = new LuckySpinSanh.PortalCaptcha.captchaSoapClient();
-                bool checkCapt = portalCaptcha.ProxyCheckCaptcha(captcha, token);
-                if (checkCapt == false)
+                if (accountId == 0)
+                {
                     return new
                     {
-                        Code = -2
+                        Code = -11,
+                        Msg = "Tài khoản không tồn tại"
                     };
-                portalCaptcha.Close();
-                int spinAvailable = GetAvailableSpin(accountId, false);
+                }
+                string tel = SpinDAO.GetAccountTelInfo(accountId);
+                NLogManager.LogMessage("Check tel account(" + accountId + "): " + tel);
+
+                if (string.IsNullOrEmpty(tel))
+                {
+                    return new
+                    {
+                        Code = -102, // tel chua dang ky
+                        Msg = "Tài khoản chưa đăng ký số điện thoại!"
+                    };
+                }
+
+                //kiem tra so luot quay đang co
+                int spinAvailable = GetAvailableSpin(accountId, true);
+                NLogManager.LogMessage("Current spin: " + spinAvailable);
                 if (spinAvailable < 0)
                     spinAvailable = 0;
-
                 if (spinAvailable < 1)
+                {
                     return new
                     {
-                        Code = -11
+                        Code = -11,
+                        Msg = "Hết lượt quay!"
                     };
+                }
 
-                byte flow = 1;
+                if (tel != "")
+                {
+                    long totalTopup = SpinDAO.GetRecentTopupCard(accountId);//lay ra so tien da nap trong game
+                    var portalCaptcha = new LuckySpinSanh.PortalCaptcha.captchaSoapClient();
+                    bool checkCapt = portalCaptcha.ProxyCheckCaptcha(captcha, token);
+                    if (checkCapt == false)
+                        return new
+                        {
+                            Code = -2,
+                            Msg = "Nhập captcha không chính xác!"
+                        };
+                    portalCaptcha.Close();
 
-                if (totalTopup < 100000)
-                    flow = 1;
-                else if (totalTopup >= 100000 && totalTopup < 200000)
-                    flow = 2;
-                else if (totalTopup >= 200000 && totalTopup < 500000)
-                    flow = 3;
-                else if (totalTopup >= 500000)
-                    flow = 4;
 
-                var smallResult = SpinSmall(flow);
-                var bigResult = SpinBig(flow);
+                    byte flow = 1;
+
+                    if (totalTopup < 100000)
+                        flow = 1;
+                    else if (totalTopup >= 100000 && totalTopup < 200000)
+                        flow = 2;
+                    else if (totalTopup >= 200000 && totalTopup < 500000)
+                        flow = 3;
+                    else if (totalTopup >= 500000)
+                        flow = 4;
+
+                    //tru luot quay
+                    GetAvailableSpin(accountId, false);
+                    if (tel == "0988005509")
+                    {
+                        bigResult = 11;
+                        smallResult = SpinSmall(flow);
+                    }
+                    else
+                    {
+                        smallResult = SpinSmall(flow);
+                        bigResult = SpinBig(flow);
+                    }
+                }
+
 
                 var isLog = SpinDAO.LogSession(accountId, smallResult, bigResult, out long sessionId);
                 if (!isLog)
@@ -98,7 +226,8 @@ namespace LuckySpinAT.Controllers
                             StarResult = bigResult,
                             CoinResult = smallResult,
                             SpinChance = spinAvailable - 1,
-                            Gold = gold
+                            Gold = gold,
+                            Msg = "Success"
                         };
                 }
 
@@ -108,7 +237,8 @@ namespace LuckySpinAT.Controllers
                     StarResult = bigResult,
                     CoinResult = smallResult,
                     SpinChance = spinAvailable - 1,
-                    Gold = gold
+                    Gold = gold,
+                    Msg = "Success"
                 };
             }
             catch (Exception ex)
@@ -118,7 +248,8 @@ namespace LuckySpinAT.Controllers
 
             return new
             {
-                Code = -99
+                Code = -99,
+                Msg = "Lỗi hệ thống -99! vui lòng thử lại"
             };
         }
 

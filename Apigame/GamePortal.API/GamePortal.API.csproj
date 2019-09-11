@@ -170,6 +170,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Constant.cs" />
+    <Compile Include="Lib\General.cs" />
+    <Compile Include="Lib\WebClass.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountBalance.cs" />
     <Compile Include="Models\AccountOTPInfo.cs" />

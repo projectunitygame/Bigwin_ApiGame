@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Utilities.Database;
 using Utilities.Log;
 
 namespace GamePortal.API.Models
@@ -23,7 +25,7 @@ namespace GamePortal.API.Models
             {
                 AccountID = 999999,
                 DisplayName = "Test account",
-                tokenAuthen = tokenAuthen
+                TokenAuthen = tokenAuthen
             };
 
             CacheHandler.Add(tokenAuthen, acc, timeout_cache);
@@ -37,23 +39,23 @@ namespace GamePortal.API.Models
                 if (accountInfo != null)
                 {
                     string token = GetMd5Hash(Guid.NewGuid().ToString());
-                    if (string.IsNullOrEmpty(accountInfo.tokenAuthen))
+                    if (string.IsNullOrEmpty(accountInfo.TokenAuthen))
                     {
-                        accountInfo.tokenAuthen = token;
+                        accountInfo.TokenAuthen = token;
                         CacheHandler.Add(token, accountInfo, timeout_cache);
                     }
                     else
                     {
-                        var data = (Models.Account)CacheHandler.Get(accountInfo.tokenAuthen);
+                        var data = (Models.Account)CacheHandler.Get(accountInfo.TokenAuthen);
                         if (data != null)
                         {
-                            CacheHandler.Remove(data.tokenAuthen);
-                            accountInfo.tokenAuthen = token;
+                            CacheHandler.Remove(data.TokenAuthen);
+                            accountInfo.TokenAuthen = token;
                             CacheHandler.Add(token, accountInfo, timeout_cache);
                         }
                         else
                         {
-                            accountInfo.tokenAuthen = token;
+                            accountInfo.TokenAuthen = token;
                             CacheHandler.Add(token, accountInfo, timeout_cache);
                         }
                     }
@@ -67,17 +69,32 @@ namespace GamePortal.API.Models
             return string.Empty;
         }
 
-        public Models.Account AccessToken(string key)
+        public Models.UserInfo AccessToken(string key)
         {
             try
             {
-                var d = (Models.Account)CacheHandler.Get(key);
-                if (d != null)
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+
+                List<SqlParameter> pars = new List<SqlParameter>
                 {
-                    CacheHandler.Remove(d.tokenAuthen);
-                    d.tokenAuthen = string.Empty;
+                    new SqlParameter("@Token", key),
+                    new SqlParameter("@DisplayName", System.Data.SqlDbType.NVarChar, 50) { Direction = System.Data.ParameterDirection.Output },
+                    new SqlParameter("@AccountID", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output },
+                    new SqlParameter("@Code", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output }
+                };
+                db.ExecuteNonQuerySP("SP_GetAccountByToken", pars.ToArray());
+
+                int response = Convert.ToInt32(pars[3].Value);
+                if (response > 0)
+                {
+                    return new UserInfo()
+                    {
+                        username = pars[1].Value.ToString(),
+                        userid = pars[2].Value.ToString()
+                    };
                 }
-                return d;
+                else
+                    return null;
             }
             catch (Exception ex)
             {

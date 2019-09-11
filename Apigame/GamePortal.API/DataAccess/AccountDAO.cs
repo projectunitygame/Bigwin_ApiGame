@@ -12,6 +12,149 @@ namespace GamePortal.API.DataAccess
 {
     public class AccountDAO
     {
+        public static long FindAccountGameMap(long accountID, int gameID)
+        {
+            long code = -1;
+            string s = "FindAccountGameMap" +
+                    "\r\nAccountId: " + accountID +
+                    "\r\nGameID: " + gameID;
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@AccountID", accountID),
+                new SqlParameter("@GameID", gameID),
+                new SqlParameter("@AccountIndex", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output }
+            };
+                db.ExecuteNonQuerySP("API_FindGameAccountMap", pars.ToArray());
+                s += "\r\nAccountIndex: " + pars[2].Value;
+                code = Convert.ToInt64(pars[2].Value.ToString());
+            }
+            catch (Exception ex)
+            {
+                s += "\r\nERROR: " + ex;
+                code = -99;
+            }
+            finally
+            {
+                NLogManager.LogMessage(s);
+            }
+            return code;
+        }
+
+        public static long AddMapAccountGame(long accountID, int gameID)
+        {
+            long code = -1;
+            string s = "AddMapAccountGame" +
+                    "\r\nAccountId: " + accountID +
+                    "\r\nGameID: " + gameID;
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@AccountID", accountID),
+                new SqlParameter("@GameID", gameID),
+                new SqlParameter("@AccountIndex", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output }
+            };
+                db.ExecuteNonQuerySP("API_AddMapAccountGame", pars.ToArray());
+                s += "\r\nAccountIndex: " + pars[2].Value;
+                code = Convert.ToInt64(pars[2].Value.ToString());
+            }
+            catch (Exception ex)
+            {
+                s += "\r\nERROR: " + ex;
+                code = -99;
+            }
+            finally
+            {
+                NLogManager.LogMessage(s);
+            }
+            return code;
+        }
+
+        public static int ConsumeWithdraw(long accountID, string receiptID, string transactionId, ref string msg, ref long currentMoney)
+        {
+            int code = -1;
+            string s = "ConsumeWithdraw" +
+                    "\r\nAccountId: " + accountID +
+                    "\r\nReceiptID: " + receiptID +
+                    "\r\nTransactionID: " + transactionId;
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@ReceiptID", receiptID),
+                new SqlParameter("@AccountId", accountID),
+                new SqlParameter("@TransactionID", transactionId), // mã giao dịch của publisher
+                new SqlParameter("@Balance", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output },
+                new SqlParameter("@Code", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output },
+                new SqlParameter("@Msg", System.Data.SqlDbType.NVarChar, 500) { Direction = System.Data.ParameterDirection.Output }
+            };
+                db.ExecuteNonQuerySP("API_ConsumeWithdraw", pars.ToArray());
+                s += "\r\nCode: " + pars[4].Value;
+                s += "\r\nMsg: " + pars[5].Value;
+                s += "\r\nCurrentMoney: " + pars[3].Value;
+                code = Convert.ToInt32(pars[4].Value);
+                currentMoney = Convert.ToInt64(pars[3].Value);
+                msg = pars[5].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                s += "\r\nERROR: " + ex;
+                code = -99;
+                msg = "Lỗi hệ thống!";
+            }
+            finally
+            {
+                NLogManager.LogMessage(s);
+            }
+            return code;
+        }
+
+        public static int ConsumeMoneyGames(long accountID, string receiptID, string transactionId, ref string msg, ref long currentMoney)
+        {
+            int code = -1;
+            string s = "ConsumeMoneyGames" +
+                    "\r\nAccountId: " + accountID +
+                    "\r\nReceiptID: " + receiptID +
+                    "\r\nTransactionID: " + transactionId;
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@ReceiptID", receiptID),
+                new SqlParameter("@AccountId", accountID),
+                new SqlParameter("@TransactionID", transactionId), // mã giao dịch của publisher
+                new SqlParameter("@Balance", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output },
+                new SqlParameter("@Code", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output },
+                new SqlParameter("@Msg", System.Data.SqlDbType.NVarChar, 500) { Direction = System.Data.ParameterDirection.Output }
+            };
+                db.ExecuteNonQuerySP("API_ConsumeMoney", pars.ToArray());
+                s += "\r\nCode: " + pars[4].Value;
+                s += "\r\nMsg: " + pars[5].Value;
+                s += "\r\nCurrentMoney: " + pars[3].Value;
+                code = Convert.ToInt32(pars[4].Value);
+                currentMoney = Convert.ToInt64(pars[3].Value);
+                msg = pars[5].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                s += "\r\nERROR: " + ex;
+                code = -99;
+                msg = "Lỗi hệ thống!";
+            }
+            finally
+            {
+                NLogManager.LogMessage(s);
+            }
+            return code;
+        }
+
+
         /// <summary>
         /// Chuyển tien từ Uwin qua game khác
         /// </summary>
@@ -23,7 +166,7 @@ namespace GamePortal.API.DataAccess
         /// <param name="msg"></param>
         /// <param name="receiptID"></param>
         /// <returns></returns>
-        public static int TransferSubMoneyGames(long accountID, string reason, long amount, string ip, int gameID, ref string msg, ref string receiptID)
+        public static int TransferSubMoneyGames(long accountID, string reason, long amount, string ip, int gameID, ref string msg, ref string receiptID, ref long currentMoney)
         {
             int code = -1;
             string s = "TransferSubMoneyGames" +
@@ -44,13 +187,18 @@ namespace GamePortal.API.DataAccess
                 new SqlParameter("@GameID", gameID),
                 new SqlParameter("@Code", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output },
                 new SqlParameter("@Msg", System.Data.SqlDbType.NVarChar, 500) { Direction = System.Data.ParameterDirection.Output },
-                new SqlParameter("@ReceiptID", System.Data.SqlDbType.VarChar, 30) { Direction = System.Data.ParameterDirection.Output }
+                new SqlParameter("@ReceiptID", System.Data.SqlDbType.VarChar, 30) { Direction = System.Data.ParameterDirection.Output },
+                new SqlParameter("@CurrentMoney", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output }
             };
                 db.ExecuteNonQuerySP("API_Transfer_SubMoney_Games", pars.ToArray());
                 s += "\r\nCode: " + pars[5].Value;
                 s += "\r\nMsg: " + pars[6].Value;
                 s += "\r\nReceiptID: " + pars[7].Value;
-                code = Convert.ToInt32(pars[2].Value);
+                s += "\r\nCurrentMoney: " + pars[8].Value;
+                code = Convert.ToInt32(pars[5].Value);
+                receiptID = pars[7].Value.ToString();
+                currentMoney = Convert.ToInt64(pars[8].Value);
+                msg = pars[6].Value.ToString();
             }
             catch (Exception ex)
             {
@@ -76,11 +224,10 @@ namespace GamePortal.API.DataAccess
         /// <param name="msg"></param>
         /// <param name="receiptID"></param>
         /// <returns></returns>
-        public static long TransferAddMoneyGames(string transactionID, int accountID, string reason, long amount, string ip, int gameID, ref string msg, ref string receiptID)
+        public static int TransferAddMoneyGames(long accountID, string reason, long amount, string ip, int gameID, ref string msg, ref string receiptID, ref long currentMoney)
         {
             int code = -1;
             string s = "TransferAddMoneyGames" +
-                    "\r\ntransactionID: " + transactionID +
                     "\r\nAccountId: " + accountID +
                     "\r\nReason: " + reason +
                     "\r\nAmount: " + amount +
@@ -91,7 +238,6 @@ namespace GamePortal.API.DataAccess
                 DBHelper db = new DBHelper(GateConfig.DbConfig);
                 List<SqlParameter> pars = new List<SqlParameter>
             {
-                new SqlParameter("@TransactionID", transactionID),
                 new SqlParameter("@AccountId", accountID),
                 new SqlParameter("@Reason", reason),
                 new SqlParameter("@Amount", amount),
@@ -105,12 +251,15 @@ namespace GamePortal.API.DataAccess
                 s += "\r\nCode: " + pars[5].Value;
                 s += "\r\nMsg: " + pars[6].Value;
                 s += "\r\nReceiptID: " + pars[7].Value;
-                code = Convert.ToInt32(pars[2].Value);
+                code = Convert.ToInt32(pars[5].Value);
+                msg = pars[6].Value.ToString();
+                receiptID = pars[7].Value.ToString();
             }
             catch (Exception ex)
             {
                 s += "\r\nERROR: " + ex;
                 code = -99;
+                msg = "Lỗi hệ thống!";
             }
             finally
             {
@@ -118,6 +267,8 @@ namespace GamePortal.API.DataAccess
             }
             return code;
         }
+
+
 
         public static long CreateNormalAccount(string username, string password, int avatarId)
         {
