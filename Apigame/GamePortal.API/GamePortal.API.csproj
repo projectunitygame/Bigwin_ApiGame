@@ -186,6 +186,7 @@
     <Compile Include="Models\DeductLog.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GateConfig.cs" />
+    <Compile Include="Models\GetOtpFirst.cs" />
     <Compile Include="Models\GiftcodeBalance.cs" />
     <Compile Include="Models\GoldLockTransaction.cs" />
     <Compile Include="Models\InappPurchase\AndroidTransaction.cs" />

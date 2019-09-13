@@ -488,6 +488,7 @@ namespace PTCN.CrossPlatform.Minigame.LuckyDice.Database
                 using (var connection = new SqlConnection(connectionString))
                 {
                     var query = connection.QueryFirstOrDefault("select [event].[BetKingCheck]() status");
+                    NLogManager.LogMessage("IsEventBetKing: " + JsonConvert.SerializeObject(query));
                     if(query != null)
                     {
                         return Convert.ToBoolean(query.status);

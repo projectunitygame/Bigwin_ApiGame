@@ -21,6 +21,7 @@ namespace Game.Events.Database.DAOImpl
 
                 var pars = new SqlParameter[1];
                 pars[0] = new SqlParameter("@_IsEvent", SqlDbType.Bit) { Direction = ParameterDirection.Output };
+                NLogManager.LogMessage("Checkkkkkkkk: " + ConnectionString.MiniPokerConnectionString);
                 DBHelper db = new DBHelper(ConnectionString.MiniPokerConnectionString);
                 BigJackpotInfo obj = new BigJackpotInfo();
                 obj.List = db.GetListSP<BigJackpot>("[dbo].[SP_Event_BigJackpot_GetInfo]", pars);
@@ -30,6 +31,7 @@ namespace Game.Events.Database.DAOImpl
             catch (Exception ex)
             {
                 NLogManager.PublishException(ex);
+                NLogManager.LogMessage(ex.ToString());
                 return null;
             }
         }

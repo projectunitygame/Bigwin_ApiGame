@@ -16,7 +16,9 @@ namespace Game.Events.Controllers
         [HttpOptions, HttpGet]
         public bool checkEvent()
         {
-            return LuckyDiceEventDAO.checkEvent();
+            bool c = LuckyDiceEventDAO.checkEvent();
+            NLogManager.LogMessage("checkEvent: " + c);
+            return c;
         }
 
         [HttpOptions, HttpGet, Authorize]

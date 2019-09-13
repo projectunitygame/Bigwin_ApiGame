@@ -1,5 +1,6 @@
 ﻿using Game.Events.Database.DTO;
 using Game.Events.Database.Factory;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Utilities.Cache;
+using Utilities.Log;
 
 namespace Game.Events.Controllers
 {
@@ -20,6 +22,7 @@ namespace Game.Events.Controllers
                 bigJackpotInfo = AbstractDAOFactory.Instance().CreateMiniPokerBigJackpotDAO().GetBigJackpotInfo();
                 CacheHandler.Add("minipoker_BigJackpotInfo", bigJackpotInfo, 10);
             }
+            NLogManager.LogMessage("Response GetBigJackpotInfo: " + JsonConvert.SerializeObject(bigJackpotInfo));
             return bigJackpotInfo;
         }
 
