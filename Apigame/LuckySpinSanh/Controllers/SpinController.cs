@@ -23,11 +23,20 @@ namespace LuckySpinAT.Controllers
             try
             {
                 long accountId = AccountSession.AccountID;
-                NLogManager.LogMessage("GetAvailable: " + accountId);
-                string tel = SpinDAO.GetAccountTelInfo(accountId);
-                NLogManager.LogMessage("Check tel account(" + accountId + "): " + tel);
+                if(accountId <= 0)
+                {
+                    NLogManager.LogMessage("GetAvailable not login!!!");
+                    return new
+                    {
+                        Code = -1,
+                        SpinChance = 0
+                    };
+                }
+                //NLogManager.LogMessage("GetAvailable: " + accountId);
+                //string tel = SpinDAO.GetAccountTelInfo(accountId);
+                //NLogManager.LogMessage("Check tel account(" + accountId + "): " + tel);
                 int spinAvailable = GetAvailableSpin(accountId, true);
-                NLogManager.LogMessage("GetAvailable spin: " + spinAvailable);
+                NLogManager.LogMessage("GetAvailable spin["+ accountId + "]: " + spinAvailable);
                 if (spinAvailable < 0)
                     spinAvailable = 0;
                 return new
