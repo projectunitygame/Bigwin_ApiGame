@@ -27,7 +27,7 @@ namespace GamePortal.API.Controllers.Transaction
     public class TransactionController : ApiController
     {
         [HttpGet, HttpOptions, Authorize]
-        public long Transfer(string accountName, long amount, string reason, string captcha, string token)
+        public long Transfer(string accountName, long amount, string reason, string otp)
         {
             NLogManager.LogMessage("Transfer info: " + accountName + "|" + amount + "|" + reason);
             try
@@ -44,10 +44,10 @@ namespace GamePortal.API.Controllers.Transaction
                     return -80;
                 }
                 NLogManager.LogMessage("AccountInfo: " + JsonConvert.SerializeObject(myAccount));
-                int captchaVeriryStatus = Utilities.Captcha.Verify(captcha, token);
-                if (captchaVeriryStatus < 0) return captchaVeriryStatus;
+                if (string.IsNullOrEmpty(otp) || (!OTP.OTP.ValidateOTP(myAccount.AccountID, otp, myAccount.Tel)))
+                    return -60;
 
-                if(accountName.Length == 13 && accountName.Substring(0,5) == "UWIN.")
+                if (accountName.Length == 13 && accountName.Substring(0,5) == "UWIN.")
                 {
                     #region Chuyen gold to daily
                     //var accountSandbox = ConfigurationManager.AppSettings["AccountSandbox"].Split(',').ToList();

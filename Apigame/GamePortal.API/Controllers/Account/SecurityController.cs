@@ -94,15 +94,16 @@ namespace GamePortal.API.Controllers.Account
         }
 
         [Authorize, HttpOptions, HttpGet]
-        public int UpdatePhoneNumber(string phoneNumber, string otp)
+        public int UpdatePhoneNumber(string phoneNumber, string captcha,string tokenCaptcha)
         {
             try
             {
+                NLogManager.LogMessage("UpdatePhoneNumber:" + phoneNumber + ":" + captcha+":"+ tokenCaptcha);
                 if (!PhoneDetector.IsValidPhone(phoneNumber))
                     return -54;
 
                 var accountId = AccountSession.AccountID;
-                NLogManager.LogMessage("UpdatePhoneNumber:" + phoneNumber + ":" + otp);
+                
                 var account = AccountDAO.GetAccountById(AccountSession.AccountID);
                 if (AccountDAO.CheckPhoneUsed(phoneNumber))
                 {
@@ -112,25 +113,15 @@ namespace GamePortal.API.Controllers.Account
                 {
                     string p = account.Tel;
 
-                    if (!OTP.OTP.ValidateOTP(accountId, otp, p))
-                        return -60;
+                    int captchaVeriryStatus = Utilities.Captcha.Verify(captcha, tokenCaptcha);
+                    if (captchaVeriryStatus < 0) return -2;
                 }
                 else
                 {
-
-                    var infoApp = OtpDAO.GetCurrentCounter(accountId);
-                    string token = infoApp?.AppT;
-                    if (!string.IsNullOrEmpty(infoApp?.AppT))
-                    {
-                        if (OTPApp.ValidateOTP($"{Security.MD5Encrypt($"{accountId}_{token}")}_{token}", otp))
-                            goto doneOTP;
-                    }
-
-                    if (!OTP.OTP.ValidateOTP(accountId, otp, phoneNumber))
-                        return -60;
+                    int captchaVeriryStatus = Utilities.Captcha.Verify(captcha, tokenCaptcha);
+                    if (captchaVeriryStatus < 0) return -2;
                 }
 
-                doneOTP:
                 SecurityDAO.UpdatePhoneNumber(AccountSession.AccountID, phoneNumber);
 
                 return 1;
@@ -248,14 +239,17 @@ namespace GamePortal.API.Controllers.Account
                 //chua lay otp 1 lan free
                 if (SecurityDAO.GetIsGetOtpFirst(account.AccountID).IsGetOtpFirst == 0)
                 {
+                    NLogManager.LogMessage("phoneNumber:"+ phoneNumber);
                     if (phoneNumber == "") {
                         return -71;
                     }
+                    NLogManager.LogMessage("phoneNumber1:" + phoneNumber);
                     if (!PhoneDetector.IsValidPhone(phoneNumber))
                     {
                         NLogManager.LogMessage("FAIL PHONE: " + phoneNumber);
                         return -54;
                     }
+                    NLogManager.LogMessage("phoneNumber2:" + phoneNumber);
                     //send to phonenumber
                     //this case is for the first time update phone
                     var status = OTP.OTP.GenerateOTP(AccountSession.AccountID, phoneNumber);
@@ -269,7 +263,9 @@ namespace GamePortal.API.Controllers.Account
                 }
                 else
                 {
-                    NLogManager.LogMessage("OTP to phone: " + account.Tel);
+                    if (string.IsNullOrEmpty(account.Tel) == false)
+                        account.Tel = phoneNumber;
+                    NLogManager.LogMessage("OTP to phone: " + phoneNumber);
                     var status = OTP.OTP.GenerateOTP(AccountSession.AccountID, account.Tel);
                     NLogManager.LogMessage("OTP: " + status);
                     if (int.Parse(status) < 0) return int.Parse(status);
