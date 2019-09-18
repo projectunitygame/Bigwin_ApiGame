@@ -16,6 +16,7 @@
             <asp:Button ID="Button4" runat="server" Text="Encrypt" OnClick="Button4_Click" />
 &nbsp;<asp:Button ID="Button5" runat="server" OnClick="Button5_Click" Text="Encrypt2" />
 &nbsp;<asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Clear" />
+            &nbsp;<asp:Button ID="Button6" runat="server" OnClick="Button6_Click" Text="Decrypt Api" />
             <br />
             <br />
             <asp:Label ID="lblDecrypt" runat="server" Text="DecryptData:"></asp:Label>

@@ -10,14 +10,14 @@ namespace Minigame.MiniPokerServer.Models
 {
     public class ConnectionString
     {
-        static string connectionString = ConnectionStringUtil.Decrypt(ConfigurationManager.ConnectionStrings["SlotMachineConnectionString"].ConnectionString, false);
+        static string connectionString = ConnectionStringUtil.Decrypt(ConfigurationManager.ConnectionStrings["SlotMachineConnectionString"].ConnectionString, true);
         public static string GameConnectionString
         {
             get
             {
-#if DEV
-                return ConfigurationManager.ConnectionStrings["SlotMachineConnectionString"].ConnectionString;
-#endif
+//#if DEV
+//                return ConfigurationManager.ConnectionStrings["SlotMachineConnectionString"].ConnectionString;
+//#endif
                 return (connectionString);
             }
         }

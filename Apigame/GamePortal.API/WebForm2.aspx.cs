@@ -202,6 +202,11 @@ namespace GamePortal.API
             string s = new RijndaelEnhanced("pay", "@1B2c3D4e5F6g7H8").Encrypt(this.TextBox1.Text);
             this.TextBox3.Text = s;
         }
+
+        protected void Button6_Click(object sender, EventArgs e)
+        {
+            this.lblMsg1.Text = ConnectionStringUtil.Decrypt(this.TextBox1.Text);
+        }
     }
 
     public class RijndaelEnhanced
