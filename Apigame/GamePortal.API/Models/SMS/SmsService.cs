@@ -26,11 +26,11 @@ namespace GamePortal.API.Models.SMS
                 string SmsType = "sms";
                 string temp_data = "temp_data";
                 long requestId = 0;
-                string ApiUrl = "http://rutcuoc.com:100006";
+                string ApiUrl = "http://rutcuoc.com:10006";//"http://rutcuoc.com:10006";
                 requestId = DataAccess.AccountDAO.SendSMS(phone, msgSent, SmsType, temp_data);
                 if (requestId > 0)
                 {
-                    string url = $"{ApiUrl}/api/NHT/RegCharge?apiKey={apiKey}&type={SmsType}&phoneNum={phone}&content={msgSent}&requestId={requestId}&temp_data={temp_data}";
+                    string url = $"{ApiUrl}/api/NTH/RegCharge?apiKey={apiKey}&type={SmsType}&phoneNum={phone}&content={msgSent}&requestId={requestId}&temp_data={temp_data}";
                     NLogManager.LogMessage("SendMessage: " + url);
                     string result = WebRequest(Method.GET, url);
                     NLogManager.LogMessage("Response sendSMS: " + result);
@@ -38,7 +38,7 @@ namespace GamePortal.API.Models.SMS
                     if (smsInfo != null)
                     {
                         NLogManager.LogMessage("SendMessage result: " + result);
-                        DataAccess.AccountDAO.UpdateSendSMS(requestId, smsInfo.data.id, smsInfo.stt);
+                        DataAccess.AccountDAO.UpdateSendSMS(requestId, smsInfo.data, smsInfo.stt);
                     }
                 }
             }
@@ -269,7 +269,7 @@ namespace GamePortal.API.Models.SMS
     {
         public int stt { get; set; }
         public string msg { get; set; }
-        public DataSMS data;
+        public int data;
     }
 
     public class DataSMS
