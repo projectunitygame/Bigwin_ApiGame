@@ -18,7 +18,6 @@ namespace Game.Events.Database.DAOImpl
         {
             try
             {
-
                 var pars = new SqlParameter[1];
                 pars[0] = new SqlParameter("@_IsEvent", SqlDbType.Bit) { Direction = ParameterDirection.Output };
                 //NLogManager.LogMessage("Checkkkkkkkk: " + ConnectionString.MiniPokerConnectionString);
