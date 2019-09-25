@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -18,21 +19,54 @@ namespace GamePortal.API.Models.SMS
     {
         public static void SendMessage(string phone, string message)
         {
-            string msgSent = RemoveSign4VietnameseString(message);//HttpUtility.UrlEncode(message);
-            string ApiKey = "3F11E064600D5C3E073FA1B033831B";
-            string SecretKey = "C8F2CCDA4C9B32CAC4E3EFDD1C08B8";
-            string brandName = "Svoucher";
-            //string SmsType = "4";
-            string SmsType = "2";
-            //string url = $"http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone={phone}&Content={msgSent}&ApiKey={ApiKey}&SecretKey={SecretKey}&SmsType={SmsType}&brandname=Verify";
-            //string url = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone="+phone+"&Content="+msgSent+"&ApiKey="+ApiKey+"&SecretKey="+SecretKey+"&SmsType="+SmsType+"&brandname=Verify";
-            string url = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone=" + phone + "&Content=" + msgSent + "&ApiKey=" + ApiKey + "&SecretKey=" + SecretKey + "&SmsType=" + SmsType + "&brandname=" + brandName;
-            NLogManager.LogMessage("SendMessage: " + url);
-            string result = WebRequest(Method.GET, url);
-            NLogManager.LogMessage("SendMessage result: " + result);
-            //string result = HttpUtils.GetStringHttpResponse(url);
-
+            try
+            {
+                string msgSent = RemoveSign4VietnameseString(message);//HttpUtility.UrlEncode(message);
+                string apiKey = "5ac0b9e4-2bb9-4d85-b526-7f2daa434627";
+                string SmsType = "sms";
+                string temp_data = "temp_data";
+                long requestId = 0;
+                string ApiUrl = "http://rutcuoc.com:100006";
+                requestId = DataAccess.AccountDAO.SendSMS(phone, msgSent, SmsType, temp_data);
+                if (requestId > 0)
+                {
+                    string url = $"{ApiUrl}/api/NHT/RegCharge?apiKey={apiKey}&type={SmsType}&phoneNum={phone}&content={msgSent}&requestId={requestId}&temp_data={temp_data}";
+                    NLogManager.LogMessage("SendMessage: " + url);
+                    string result = WebRequest(Method.GET, url);
+                    NLogManager.LogMessage("Response sendSMS: " + result);
+                    var smsInfo = JsonConvert.DeserializeObject<ResultSendSMS>(result);
+                    if (smsInfo != null)
+                    {
+                        NLogManager.LogMessage("SendMessage result: " + result);
+                        DataAccess.AccountDAO.UpdateSendSMS(requestId, smsInfo.data.id, smsInfo.stt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                NLogManager.LogMessage("Error SendMessage: " + ex);
+                throw new Exception(ex.ToString());
+            }
+            
         }
+
+        //public static void SendMessage(string phone, string message)
+        //{
+        //    string msgSent = RemoveSign4VietnameseString(message);//HttpUtility.UrlEncode(message);
+        //    string ApiKey = "3F11E064600D5C3E073FA1B033831B";
+        //    string SecretKey = "C8F2CCDA4C9B32CAC4E3EFDD1C08B8";
+        //    string brandName = "Svoucher";
+        //    //string SmsType = "4";
+        //    string SmsType = "2";
+        //    //string url = $"http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone={phone}&Content={msgSent}&ApiKey={ApiKey}&SecretKey={SecretKey}&SmsType={SmsType}&brandname=Verify";
+        //    //string url = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone="+phone+"&Content="+msgSent+"&ApiKey="+ApiKey+"&SecretKey="+SecretKey+"&SmsType="+SmsType+"&brandname=Verify";
+        //    string url = "http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone=" + phone + "&Content=" + msgSent + "&ApiKey=" + ApiKey + "&SecretKey=" + SecretKey + "&SmsType=" + SmsType + "&brandname=" + brandName;
+        //    NLogManager.LogMessage("SendMessage: " + url);
+        //    string result = WebRequest(Method.GET, url);
+        //    NLogManager.LogMessage("SendMessage result: " + result);
+        //    //string result = HttpUtils.GetStringHttpResponse(url);
+
+        //}
 
         public enum Method { GET, POST, PUT };
 
@@ -228,5 +262,18 @@ namespace GamePortal.API.Models.SMS
         //    String json = builder.ToString();
         //    return client.UploadString(url, json);
         //}
+    }
+
+    //{"stt":1,"msg":"Complete","data":{"id":119}}
+    public class ResultSendSMS
+    {
+        public int stt { get; set; }
+        public string msg { get; set; }
+        public DataSMS data;
+    }
+
+    public class DataSMS
+    {
+        public long id { get; set; }
     }
 }

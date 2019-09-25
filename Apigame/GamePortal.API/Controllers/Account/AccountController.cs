@@ -34,6 +34,20 @@ namespace GamePortal.API.Controllers.Account
             return token;
         }
 
+        [HttpOptions, HttpGet]
+        public string TestSMS(string phone, string msg)
+        {
+            try
+            {
+                SmsService.SendMessage(phone, msg);
+                return "success";
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
         /// <summary>
         /// Chuyen tien tu Uwin sang game khac
         /// </summary>
@@ -277,11 +291,7 @@ namespace GamePortal.API.Controllers.Account
             };
             NLogManager.LogMessage("GetTokenAuthen: " + JsonConvert.SerializeObject(accountInfo) +
                 "\r\nTokenAuthen: " + JsonConvert.SerializeObject(r));
-
-
             //CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca);
-
-
             return r;
         }
 

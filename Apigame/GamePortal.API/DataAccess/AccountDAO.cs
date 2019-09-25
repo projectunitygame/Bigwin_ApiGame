@@ -12,6 +12,49 @@ namespace GamePortal.API.DataAccess
 {
     public class AccountDAO
     {
+        public static void UpdateSendSMS(long id, long messageId, int status)
+        {
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@Id", id),
+                new SqlParameter("@MessageId", messageId),
+                new SqlParameter("@Status", status)
+            };
+                db.ExecuteNonQuerySP("[API_UpdateSendSMS]", pars.ToArray());
+            }
+            catch (Exception ex)
+            {
+                NLogManager.LogMessage("ERROR UpdateSendSMS " + ex);
+            }
+        }
+
+        public static long SendSMS(string phone, string content, string type, string temp_data)
+        {
+            try
+            {
+                DBHelper db = new DBHelper(GateConfig.DbConfig);
+                List<SqlParameter> pars = new List<SqlParameter>
+            {
+                new SqlParameter("@Phone", phone),
+                new SqlParameter("@Content", content),
+                new SqlParameter("@Type", type),
+                new SqlParameter("@Temp_data", temp_data),
+                new SqlParameter("@Id", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output }
+            };
+                db.ExecuteNonQuerySP("[API_SendSMS]", pars.ToArray());
+                return Convert.ToInt64(pars[4].Value.ToString());
+            }
+            catch (Exception ex)
+            {
+                NLogManager.LogMessage("ERROR SendSMS " + ex);
+                return -99;
+            }
+        }
+
+
         public static bool CheckPhoneUsed(string phoneNumber)
         {
             try
