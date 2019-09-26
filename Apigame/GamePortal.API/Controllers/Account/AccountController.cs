@@ -212,7 +212,7 @@ namespace GamePortal.API.Controllers.Account
                     string postData = string.Format("userid={0}&username={1}&apiToken={2}&balance={3}", accountID, username, Lib.Constant.apiToken, 0);
                     string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "register", postData);
                     //Lib.WebClass.SendPost(JsonConvert.SerializeObject(postData), Lib.Constant.url_fish + "register", "application/x-www-form-urlencoded;charset=utf-8");
-                    //NLogManager.LogMessage(res);
+                    NLogManager.LogMessage(res);
                     var regInfo = JsonConvert.DeserializeObject<APIResponseRegister>(res);
                     if (regInfo.result.returnCode == 0 || regInfo.result.returnCode == 4)
                     {
@@ -239,34 +239,42 @@ namespace GamePortal.API.Controllers.Account
         [HttpOptions, HttpGet]
         public FishData GetFishAccount()
         {
-            FishData r = new FishData();
-            if (AccountSession.AccountID <= 0)
+            try
             {
-                NLogManager.LogMessage("Account NULL!");
-                r.returnCode = -1;
-                r.message = "Account is null!!!";
-                return r;
-            }
-            TokenAuthen t = new TokenAuthen();
-            var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
+                FishData r = new FishData();
+                if (AccountSession.AccountID <= 0)
+                {
+                    NLogManager.LogMessage("Account NULL!");
+                    r.returnCode = -1;
+                    r.message = "Account is null!!!";
+                    return r;
+                }
+                TokenAuthen t = new TokenAuthen();
+                var accountInfo = AccountDAO.GetAccountInfo(AccountSession.AccountID);
 
-            if (CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca) < 0)
-            {
-                r.returnCode = -101;
-                r.message = "Lỗi hệ thống check tài khoản!";
+                if (CheckAccountMap(accountInfo.AccountID, accountInfo.DisplayName, Lib.Constant.gameID_ca) < 0)
+                {
+                    r.returnCode = -101;
+                    r.message = "Lỗi hệ thống check tài khoản!";
+                    return r;
+                }
+                string postData = string.Format("userid={0}&apiToken={1}&transactionId={2}", accountInfo.AccountID, Lib.Constant.apiToken, Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString()));
+                string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "get_balance", postData);
+                var data = JsonConvert.DeserializeObject<ApiFishInfo>(res);
+                if (data != null)
+                {
+                    r.returnCode = data.returnCode;
+                    r.data = data.result.data;
+                    r.message = "success";
+                }
+                NLogManager.LogMessage("Response fish account: " + JsonConvert.SerializeObject(r));
                 return r;
             }
-            string postData = string.Format("userid={0}&apiToken={1}&transactionId={2}", accountInfo.AccountID, Lib.Constant.apiToken, Utilities.Encryption.Security.MD5Encrypt(Guid.NewGuid().ToString()));
-            string res = Lib.WebHelper.WebRequest(Lib.WebHelper.Method.POST, Lib.Constant.url_fish + "get_balance", postData);
-            var data = JsonConvert.DeserializeObject<ApiFishInfo>(res);
-            if (data != null)
+            catch (Exception ex)
             {
-                r.returnCode = data.returnCode;
-                r.data = data.result.data;
-                r.message = "success";
-            }
-            NLogManager.LogMessage("Response fish account: " + JsonConvert.SerializeObject(r));
-            return r;
+                NLogManager.LogMessage("Error GetFishAccount: " + ex);
+                return null;
+            }          
         }
 
         /// <summary>

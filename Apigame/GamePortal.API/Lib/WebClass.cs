@@ -86,6 +86,7 @@ namespace GamePortal.API.Lib
         {
             if (string.IsNullOrEmpty(url))
                 return "";
+            NLogManager.LogMessage(method.ToString() + ": " + url + "\r\nPost: " + postData);
             HttpWebRequest webRequest = null;
             StreamWriter requestWriter = null;
             string responseData = "";
@@ -118,10 +119,9 @@ namespace GamePortal.API.Lib
                     requestWriter = null;
                 }
             }
-
             responseData = WebResponseGet(webRequest);
+            NLogManager.LogMessage("responseData: " + responseData);
             webRequest = null;
-            NLogManager.LogMessage(method.ToString() + ": " + url + "\r\nPost: " + postData + "\r\nResponse: " + responseData);
             return responseData;
         }
 

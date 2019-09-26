@@ -12,6 +12,14 @@ namespace GamePortal.API.DataAccess
 {
     public class AccountDAO
     {
+        public static Account GetAccountByID(long accountID)
+        {
+            //NLogManager.LogMessage($"{GateConfig.DbConfig}");
+            DBHelper db = new DBHelper(GateConfig.DbConfig);
+
+            return db.GetInstance<Account>($"select * from dbo.Account with(nolock) where AccountID = '{accountID}'");
+        }
+
         public static void UpdateSendSMS(long id, long messageId, int status)
         {
             try
