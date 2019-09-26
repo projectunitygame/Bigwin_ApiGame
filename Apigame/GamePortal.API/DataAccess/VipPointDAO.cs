@@ -13,7 +13,7 @@ namespace GamePortal.API.DataAccess
 {
     public class VipPointDAO
     {
-
+        private static List<VipPointDatabase> ListVipPointDatabase = null;
         public static ShortVipPoint GetShortInfoVipPoint(long accountId)
         {
             DBHelper db = new DBHelper(GateConfig.DbConfig);
@@ -26,8 +26,13 @@ namespace GamePortal.API.DataAccess
 
         public static List<VipPointDatabase> GetVipPointDatabase()
         {
+            if (ListVipPointDatabase != null)
+            {
+                return ListVipPointDatabase;
+            }
             DBHelper db = new DBHelper(GateConfig.DbConfig);
-            return db.GetList<VipPointDatabase>($"SELECT * FROM dbo.VipPoint");
+            ListVipPointDatabase = db.GetList<VipPointDatabase>($"SELECT * FROM dbo.VipPoint");
+            return ListVipPointDatabase;
         }
 
         public static ShortVipPoint ExchangeVipPoint(long accountId, int vipPoint)
@@ -38,7 +43,7 @@ namespace GamePortal.API.DataAccess
                 new SqlParameter("@_AccountId", accountId),
             };
             ShortVipPoint shortVipPoint = db.GetInstanceSP<ShortVipPoint>("SP_GetShortInfoVipPoint", pars.ToArray());
-            if (shortVipPoint.VipPoint < vipPoint)
+            if (shortVipPoint.Point < vipPoint)
             {
                 shortVipPoint.ResponseStatus = -202;
                 //không đủ vippoint để exchange
@@ -46,23 +51,21 @@ namespace GamePortal.API.DataAccess
             }
             List<VipPointDatabase> listVipPointData = GetVipPointDatabase();
             int ratioExchange = listVipPointData[shortVipPoint.LevelVip].RatioExchange;
-            shortVipPoint.VipPoint -= vipPoint;
+            shortVipPoint.Point -= vipPoint;
             shortVipPoint.Gold += vipPoint * ratioExchange;
-            shortVipPoint.Exp -= vipPoint * 1000000;
             for (int i = listVipPointData.Count - 1; i >= 0; i--)
             {
-                if (shortVipPoint.VipPoint >= listVipPointData[i].VipPoint)
+                if (shortVipPoint.Point >= listVipPointData[i].VipPoint)
                 {
-                    shortVipPoint.LevelVip = i;
+                    shortVipPoint.LevelVip = i+1;
                     break;
                 }
             }
             List<SqlParameter> pars1 = new List<SqlParameter>
             {
                 new SqlParameter("@_AccountId", accountId),
-                new SqlParameter("@_VipPoint", shortVipPoint.VipPoint),
+                new SqlParameter("@_VipPoint", shortVipPoint.Point),
                 new SqlParameter("@_Gold", shortVipPoint.Gold),
-                new SqlParameter("@_BetExchange", shortVipPoint.Exp),
                 new SqlParameter("@_LevelVip", shortVipPoint.LevelVip),
             };
             db.ExecuteNonQuerySP("SP_ExchangeVipPoint", pars1.ToArray());

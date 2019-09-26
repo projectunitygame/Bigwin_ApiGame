@@ -54,6 +54,7 @@ namespace Minigame.MiniPokerServer.Database.DTO
         public int ResponseStatus { get; set; }
         public List<MiniPokerListCardModel> Cards { get; set; }
         public int IsAutoFreeze { get; set; }
+        public int IndexLine { get; set; }
     }
     public class MiniPokerTopWinnerModel
     {

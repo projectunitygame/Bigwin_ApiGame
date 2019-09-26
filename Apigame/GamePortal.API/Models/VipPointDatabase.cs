@@ -9,5 +9,6 @@ namespace GamePortal.API.Models
         public int RewardMonth { get; set; }
         public int RewardBirthDay { get; set; }
         public int RatioExchange { get; set; }
+        public int RewardLevel { get; set; }
     }
 }

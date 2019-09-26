@@ -188,6 +188,7 @@
     <Compile Include="Controllers\Transaction\TopupController.cs" />
     <Compile Include="Controllers\Transaction\TransactionController.cs" />
     <Compile Include="Controllers\Transaction\TransactionHistoryController.cs" />
+    <Compile Include="Controllers\Transaction\VipPointController.cs" />
     <Compile Include="DataAccess\AccountDAO.cs" />
     <Compile Include="DataAccess\GameDAO.cs" />
     <Compile Include="DataAccess\LogDAO.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="DataAccess\MailDAO.cs" />
     <Compile Include="DataAccess\SecurityDAO.cs" />
     <Compile Include="DataAccess\TransactionDAO.cs" />
+    <Compile Include="DataAccess\VipPointDAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -239,6 +241,8 @@
     <Compile Include="Models\UserMail.cs" />
     <Compile Include="Models\VIPRankConfig.cs" />
     <Compile Include="Models\VIPRewardLog.cs" />
+    <Compile Include="Models\ShortVipPoint.cs" />
+    <Compile Include="Models\VipPointDatabase.cs" />
     <Compile Include="OTPService.asmx.cs">
       <DependentUpon>OTPService.asmx</DependentUpon>
       <SubType>Component</SubType>

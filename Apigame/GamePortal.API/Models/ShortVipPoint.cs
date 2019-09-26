@@ -9,9 +9,10 @@ namespace GamePortal.API.Models
     {
         public int LevelVip { get; set; }
         public long Exp { get; set; }
-        public int VipPoint { get; set; }
+        public int Point { get; set; }
         public long Gold { get; set; }
-        public string DateBirthDay { get; set; }
+        public int LevelMax { get; set; }
+        public string LevelReward { get; set; }
         public int ResponseStatus { get; set; }
     }
 }

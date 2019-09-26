@@ -105,7 +105,7 @@ namespace MiniPoker.WebServer.Controllers
             return base.OnDisconnected(stopCalled);
         }
         [Authorize]
-        public long Spin(byte betType, byte roomID)
+        public long Spin(byte betType, byte roomID,byte numberLine)
         {
             try
             {
@@ -133,17 +133,27 @@ namespace MiniPoker.WebServer.Controllers
                         accountName, accountId, maxSpinPerSecond));
                     return -1001;
                 }
+                
                 if (CacheCounter.AccountActionCounter(accountId.ToString(),"SpinAm") > 5)
                 {
                     NLogManager.LogMessage(string.Format("BlockAccAm=> {0} ({1}) bắn âm > 5 lần.", accountName, accountId));
                     return -1003;
                 }
                 MiniPokerHandler.Instance.UpdatePlayer(accountId);
-                int res = MiniPokerHandler.Instance.MpSpin(accountId, accountName, betType, roomID, base.Context.ConnectionId, _isMobilePl);
-                if (res < 0)
+                int res = -1;
+                for (int i = 0; i < numberLine; i++)
                 {
-                    CacheCounter.CheckAccountActionFrequency(accountId.ToString(), 15, "SpinAm");
+                    res = MiniPokerHandler.Instance.MpSpin(accountId, accountName, betType, roomID, base.Context.ConnectionId, _isMobilePl,i);
+                    if (res < 0)
+                    {
+                        CacheCounter.CheckAccountActionFrequency(accountId.ToString(), 15, "SpinAm");
+                    }
                 }
+                //int res = MiniPokerHandler.Instance.MpSpin(accountId, accountName, betType, roomID, base.Context.ConnectionId, _isMobilePl);
+                //if (res < 0)
+                //{
+                //    CacheCounter.CheckAccountActionFrequency(accountId.ToString(), 15, "SpinAm");
+                //}
                 return res;
             }
             catch (NotAuthorizedException notAuthorizedException)

@@ -200,8 +200,9 @@ namespace MiniPoker.WebServer.Handlers
 
             return miniPokerSpinResponse;
         }
-        public int MpSpin(long accountId, string username, byte betType, byte roomID, string connectionId,int mobilePl)
+        public int MpSpin(long accountId, string username, byte betType, byte roomID, string connectionId,int mobilePl,int indexLine)
         {
+            NLogManager.LogMessage("MpSpin:" + username + ":" + indexLine);
             int responseStatus;
             string clientIP = IPAddressHelper.GetClientIP();
             int sourceID = 1;
@@ -211,6 +212,7 @@ namespace MiniPoker.WebServer.Handlers
             {
                 if (miniPokerSpinResponse != null)
                 {
+                    miniPokerSpinResponse.IndexLine = indexLine;
                     this.MpSpinResultToClient(miniPokerSpinResponse, connectionId);
                     string groupName = ConnectionHandler.Instance.GetGroupName(betType, roomID, "");
                     ConnectionHandler.Instance.AddGroup(connectionId, groupName);

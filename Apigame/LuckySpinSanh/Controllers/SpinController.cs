@@ -159,7 +159,7 @@ namespace LuckySpinAT.Controllers
                 {
                     return new
                     {
-                        Code = -102, // tel chua dang ky
+                        Code = -103, // tel chua dang ky
                         Msg = "Tài khoản chưa đăng ký số điện thoại!"
                     };
                 }

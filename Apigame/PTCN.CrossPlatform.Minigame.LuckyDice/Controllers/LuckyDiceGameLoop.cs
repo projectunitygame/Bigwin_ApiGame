@@ -666,7 +666,7 @@ namespace PTCN.CrossPlatform.Minigame.LuckyDice.Controllers
                                     _eventBetKing[output.AccountID].Gained += gainedPrize;
                                 }
 
-                                strQuery.AppendLine($"exec LD_UpdateResult @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
+                                strQuery.AppendLine($"exec LD_UpdateResult @_BetValue = {amount}, @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
                                     $"@_Dice2 = {Result.Dice2}, @_Dice3 = {Result.Dice3}, @_DateStatus = {dateStatus}, " +
                                     $"@_IsBotBet = {output.IsBotBet}, @_Refund = {refundMoney}, @_Prize = {prizeValue}, @_LogId = {output.LogId}, @_LogSumaryId = {output.LogSumId}");
 
@@ -725,7 +725,7 @@ namespace PTCN.CrossPlatform.Minigame.LuckyDice.Controllers
                                 _eventBetKing[output.AccountID].Gained += gainedPrize;
                             }
 
-                            strQuery.AppendLine($"exec LD_UpdateResult @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
+                            strQuery.AppendLine($"exec LD_UpdateResult @_BetValue = {amount}, @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
                                 $"@_Dice2 = {Result.Dice2}, @_Dice3 = {Result.Dice3}, @_DateStatus = {dateStatus}, " +
                                 $"@_IsBotBet = {output.IsBotBet}, @_Refund = {refundMoney}, @_Prize = {prizeValue}, @_LogId = {output.LogId}, @_LogSumaryId = {output.LogSumId}");
                         }
@@ -772,7 +772,7 @@ namespace PTCN.CrossPlatform.Minigame.LuckyDice.Controllers
                                     _eventBetKing[output.AccountID].Gained += (amount - refundMoney);
                                 }
 
-                                strQuery.AppendLine($"exec LD_UpdateResult @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
+                                strQuery.AppendLine($"exec LD_UpdateResult @_BetValue = {amount}, @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
                                     $"@_Dice2 = {Result.Dice2}, @_Dice3 = {Result.Dice3}, @_DateStatus = {dateStatus}, " +
                                     $"@_IsBotBet = {output.IsBotBet}, @_Refund = {refundMoney}, @_Prize = {prizeValue}, @_LogId = {output.LogId}, @_LogSumaryId = {output.LogSumId}");
                             }
@@ -800,7 +800,7 @@ namespace PTCN.CrossPlatform.Minigame.LuckyDice.Controllers
                                     });
                                 }
 
-                                strQuery.AppendLine($"exec LD_UpdateResult @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
+                                strQuery.AppendLine($"exec LD_UpdateResult @_BetValue = {amount}, @_MoneyType = {MoneyType}, @_AccountId = {output.AccountID}, @_SessionId = {SessionID}, @_Dice1 = {Result.Dice1}, " +
                                     $"@_Dice2 = {Result.Dice2}, @_Dice3 = {Result.Dice3}, @_DateStatus = {dateStatus}, " +
                                     $"@_IsBotBet = {output.IsBotBet}, @_Refund = {refundMoney}, @_Prize = {prizeValue}, @_LogId = {output.LogId}, @_LogSumaryId = {output.LogSumId}");
 
