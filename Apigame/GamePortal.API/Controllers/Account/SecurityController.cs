@@ -171,15 +171,19 @@ namespace GamePortal.API.Controllers.Account
         [HttpOptions, HttpGet]
         public void GenerateOtpTelegram(string phoneNumber, string chatIdTele)
         {
+            if (phoneNumber.Substring(0,1) != " ")
+            {
+                phoneNumber = phoneNumber.Insert(0,"+");
+            }
             phoneNumber = phoneNumber.Substring(3);
             phoneNumber = "0" + phoneNumber;
             long accountID = AccountDAO.GetAccountByTel(phoneNumber).AccountID;
             var otp = OTP.OTP.GenerateOTP(accountID, phoneNumber);
             
             NLogManager.LogMessage("GenerateOtpTelegram:" + phoneNumber + ":" + chatIdTele + ":" + otp);
-            //OtpTelegram otpTelegram = SecurityDAO.InsertOrUpdateOtp(phoneNumber, otp);
+            //OtpTelegram otpTelegram = SecurityDAO.InserOrUpdateOtp(phoneNumber, otp);
             if (otp == "-70")
-            {
+            {t
                 otp = "Sau 2 phút mới có thể lấy otp mới!";
             }
             else
@@ -239,8 +243,12 @@ namespace GamePortal.API.Controllers.Account
                 //chua lay otp 1 lan free
                 if (SecurityDAO.GetIsGetOtpFirst(account.AccountID).IsGetOtpFirst == 0)
                 {
+                    if (account.Tel != "")
+                    {
+                        phoneNumber = account.Tel;
+                    }
                     NLogManager.LogMessage("phoneNumber:"+ phoneNumber);
-                    if (phoneNumber == "") {
+                    if (phoneNumber == "" ) {
                         return -71;
                     }
                     NLogManager.LogMessage("phoneNumber1:" + phoneNumber);

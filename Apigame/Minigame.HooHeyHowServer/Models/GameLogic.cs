@@ -101,34 +101,53 @@ namespace Minigame.HooHeyHowServer.Models
                 ResultOnGate(result.Dice2, bet, ref addLog);
                 ResultOnGate(result.Dice3, bet, ref addLog);
             }
-
-            foreach (var award in _awards)
+            NLogManager.LogMessage("BuildResult:"+_awards.Count);
+            if (_awards.Count > 0)
             {
-                bool haveResult = false;
-                string accountName = string.Empty;
-                long accountId = 0;
-                string gate = string.Empty;
-                long awardValue = 0;
-                long totalBet = 0;
-                foreach (var gateAward in award.Value)
+                foreach (var award in _awards)
                 {
-                    accountName = gateAward.Value.accountName;
-                    accountId = gateAward.Value.accountId;
-                    gate += (int)gateAward.Value.betGate + ";" + gateAward.Value.award + "|";
-                    awardValue += gateAward.Value.award;
-                    totalBet += gateAward.Value.amount;
-                    haveResult = true;
-                }
+                    bool haveResult = false;
+                    string accountName = string.Empty;
+                    long accountId = 0;
+                    string gate = string.Empty;
+                    long awardValue = 0;
+                    long totalBet = 0;
+                    foreach (var gateAward in award.Value)
+                    {
+                        accountName = gateAward.Value.accountName;
+                        accountId = gateAward.Value.accountId;
+                        gate += (int)gateAward.Value.betGate + ";" + gateAward.Value.award + "|";
+                        awardValue += gateAward.Value.award;
+                        totalBet += gateAward.Value.amount;
+                        haveResult = true;
+                    }
 
-                if (haveResult)
+                    if (haveResult)
+                    {
+                        _query.AppendLine($"exec SP_Reward @_SessionId = {GameSession.Session.SessionId}, " +
+                            $"@_AccountName = N'{accountName}', " +
+                            $"@_AccountId = {accountId}, " +
+                            $"@_BetType = {(int)_moneyType}, " +
+                            $"@_Gate = N'{gate}', " +
+                            $"@_TotalBet = {totalBet}, " +
+                            $"@_Award = {awardValue}");
+                    }
+                }
+            }
+            else
+            {
+                foreach (var bet in _betLogs)
                 {
+                    
+                    string gate = (int)bet.betGate + ";" + bet.award + "|";
+                    NLogManager.LogMessage("Bau Cua Thua:" + bet.accountName + ":" + bet.amount + ":" + bet.award + ":" + gate);
                     _query.AppendLine($"exec SP_Reward @_SessionId = {GameSession.Session.SessionId}, " +
-                        $"@_AccountName = N'{accountName}', " +
-                        $"@_AccountId = {accountId}, " +
-                        $"@_BetType = {(int)_moneyType}, " +
-                        $"@_Gate = N'{gate}', " +
-                        $"@_TotalBet = {totalBet}, " +
-                        $"@_Award = {awardValue}");
+                            $"@_AccountName = N'{bet.accountName}', " +
+                            $"@_AccountId = {bet.accountId}, " +
+                            $"@_BetType = {(int)_moneyType}, " +
+                            $"@_Gate = N'{gate}', " +
+                            $"@_TotalBet = {bet.amount}, " +
+                            $"@_Award = {bet.award}");
                 }
             }
 

@@ -84,7 +84,7 @@ namespace GamePortal.API.Controllers.Transaction
                         NLogManager.LogMessage("EX Result transfer: " + -58);
                         return -58;
                     }
-                    long totalTransfer = amount + (long)(amount * 0.02);
+                    long totalTransfer = amount - (long)(amount * 0.02);
                     long r = TransactionDAO.SendGold(AccountSession.AccountID,
                         account.AccountID,
                         AccountSession.AccountName,
