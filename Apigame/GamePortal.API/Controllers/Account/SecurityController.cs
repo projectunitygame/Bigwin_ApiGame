@@ -183,7 +183,7 @@ namespace GamePortal.API.Controllers.Account
             NLogManager.LogMessage("GenerateOtpTelegram:" + phoneNumber + ":" + chatIdTele + ":" + otp);
             //OtpTelegram otpTelegram = SecurityDAO.InserOrUpdateOtp(phoneNumber, otp);
             if (otp == "-70")
-            {t
+            {
                 otp = "Sau 2 phút mới có thể lấy otp mới!";
             }
             else
